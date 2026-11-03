@@ -49,7 +49,7 @@ export interface UsrInstance {
   stat: (url: string, options?: UsrConfig) => Promise<UsrResponse>;
   man: (url: string, options?: UsrConfig) => Promise<UsrResponse>;
   request: (config: UsrConfig & { method: string }) => Promise<UsrResponse>;
-  trap: (kind: "request" | "response", fn: Function) => { eject: () => void };
+  trap: (kind: "request" | "response", fn: (value: unknown) => unknown) => { eject: () => void };
   untrap: (handle: { eject: () => void }) => void;
   cd: (baseUrl: string, options?: UsrConfig) => UsrInstance;
   defaults: UsrConfig;

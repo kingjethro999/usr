@@ -1,4 +1,4 @@
-import { networkError, timeoutError, badRequestError, badResponseError, canceledError, tooManyRedirectsError, redact } from "./error";
+import { networkError, timeoutError, badRequestError, canceledError, tooManyRedirectsError } from "./error";
 import { resolveURL, appendQuery, normalizeHeaders, serializeBody, validateStatusDefault } from "./config";
 import type { UsrConfig, UsrResponse } from "./types";
 import { UsrError } from "./error";

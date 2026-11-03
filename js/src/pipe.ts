@@ -1,5 +1,4 @@
 import { UsrError } from "./error";
-import type { UsrResponse } from "./types";
 
 export class PipeError extends UsrError {
   constructor(message: string) {
@@ -18,7 +17,7 @@ function asArray(input: unknown): unknown[] {
 }
 
 function matchItem(item: unknown, match: unknown): boolean {
-  if (typeof match === "function") return Boolean((match as Function)(item));
+  if (typeof match === "function") return Boolean((match as (item: unknown) => boolean)(item));
   if (typeof match === "string") {
     const s = JSON.stringify(item);
     return s.includes(match);

@@ -5,7 +5,7 @@ import type { UsrConfig, UsrInstance, UsrResponse } from "./types";
 
 interface TrapEntry {
   kind: "request" | "response";
-  fn: Function;
+  fn: (value: unknown) => unknown;
   synchronous?: boolean;
   runWhen?: (config: UsrConfig) => boolean;
 }
@@ -65,7 +65,7 @@ class UsrClient implements UsrInstance {
     return res;
   }
 
-  trap(kind: "request" | "response", fn: Function, options: { synchronous?: boolean; runWhen?: (config: UsrConfig) => boolean } = {}): { eject: () => void } {
+  trap(kind: "request" | "response", fn: (value: unknown) => unknown, options: { synchronous?: boolean; runWhen?: (config: UsrConfig) => boolean } = {}): { eject: () => void } {
     const entry: TrapEntry = { kind, fn, synchronous: options.synchronous, runWhen: options.runWhen };
     this.traps.push(entry);
     return {
