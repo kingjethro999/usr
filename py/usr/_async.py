@@ -17,7 +17,7 @@ from ._error import (
     too_many_redirects_error,
 )
 from ._pipe import PipeError, Pipeable
-from ._request import NO_BODY_METHODS, METHOD_BY_COMMAND, create_dispatcher
+from ._request import NO_BODY_METHODS, METHOD_BY_COMMAND
 
 
 class AsyncResponse:
@@ -122,20 +122,36 @@ class AsyncUsrClient:
         from ._config import merge_config
 
         base = merge_config(self.defaults, options or {})
-        call = create_dispatcher(base, method)
-
-        def sync_call(u, d, o=None):
-            cfg = merge_config(base, o or {})
-            cfg["url"] = u
-            cfg["method"] = method
-            if d is not None and method not in NO_BODY_METHODS:
-                cfg["data"] = d
-            cfg.setdefault("validate_status", validate_status_default)
-            return cfg
-
-        cfg = sync_call(url, data, options)
+        cfg = dict(base)
+        cfg["url"] = url
         cfg["method"] = METHOD_BY_COMMAND[method]
+        if data is not None and method not in NO_BODY_METHODS:
+            cfg["data"] = data
+        cfg.setdefault("validate_status", validate_status_default)
+
+        def run_request_traps(c):
+            for t in self._traps:
+                if t["kind"] != "request":
+                    continue
+                if t.get("runWhen") and not t["runWhen"](c):
+                    continue
+                out = t["fn"](c)
+                if out is not None:
+                    c = out
+            return c
+
+        def run_response_traps(r):
+            for t in self._traps:
+                if t["kind"] != "response":
+                    continue
+                out = t["fn"](r)
+                if out is not None:
+                    r = out
+            return r
+
+        cfg = run_request_traps(cfg)
         raw = await _adispatch(cfg)
+        raw = run_response_traps(raw)
         return AsyncResponse(raw)
 
     def trap(self, kind: str, fn: Callable, options: Optional[dict] = None) -> dict:
@@ -161,4 +177,4 @@ class AsyncUsrClient:
 
 async def cd(base_url: str, options: Optional[dict] = None) -> AsyncUsrClient:
     client = AsyncUsrClient({**dict(options or {}), "base_url": base_url})
-    return await client.cd(base_url, options)
+    return client.cd(base_url, options)
