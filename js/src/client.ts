@@ -1,5 +1,6 @@
-import { createDispatcher, request as rawRequest } from "./request";
-import { mergeConfig } from "./config";
+import { dispatch } from "./adapter";
+import { request as rawRequest, NO_BODY_METHODS, METHOD_BY_COMMAND } from "./request";
+import { mergeConfig, validateStatusDefault } from "./config";
 import { pipeable } from "./pipe";
 import type { UsrConfig, UsrInstance, UsrResponse } from "./types";
 
@@ -49,14 +50,21 @@ class UsrClient implements UsrInstance {
 
   request = (config: UsrConfig & { method: string }): Promise<UsrResponse> => {
     const merged = mergeConfig(this.defaults, config) as UsrConfig & { method: string };
-    return rawRequest(merged).then(async (r) => this.withPipe(await this.runResponseTraps(r)));
+    const prepared = this.runRequestTraps(merged) as UsrConfig & { method: string };
+    return Promise.resolve(prepared)
+      .then((cfg) => rawRequest(cfg))
+      .then(async (r) => this.withPipe(await this.runResponseTraps(r)));
   };
 
   private _call(method: MethodLike, url: string, data: unknown, options?: UsrConfig): Promise<UsrResponse> {
     const base = mergeConfig(this.defaults, options ?? {});
-    const dispatch = createDispatcher(base, method);
-    const p = dispatch(url, data);
-    return p.then(async (res) => this.withPipe(await this.runResponseTraps(res)));
+    const config: UsrConfig = { ...base, url, method: METHOD_BY_COMMAND[method] };
+    if (data !== undefined && !NO_BODY_METHODS.has(method)) config.data = data;
+    config.validateStatus = config.validateStatus ?? validateStatusDefault;
+    const prepared = this.runRequestTraps(config);
+    return Promise.resolve(prepared)
+      .then((cfg) => dispatch(cfg as UsrConfig & { method: string }))
+      .then(async (res) => this.withPipe(await this.runResponseTraps(res)));
   }
 
   private withPipe(res: UsrResponse): UsrResponse {

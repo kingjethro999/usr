@@ -4,6 +4,8 @@ import type { UsrConfig, UsrResponse } from "./types";
 
 const NO_BODY_METHODS = new Set(["cat", "rm", "stat", "man"]);
 
+export { NO_BODY_METHODS, METHOD_BY_COMMAND };
+
 const METHOD_BY_COMMAND: Record<MethodLike, string> = {
   cat: "GET",
   touch: "POST",

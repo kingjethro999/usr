@@ -2,7 +2,13 @@
   "name": "usr",
   "version": "0.1.0",
   "description": "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
-  "keywords": ["http", "client", "axios", "unix", "fetch"],
+  "keywords": [
+    "http",
+    "client",
+    "axios",
+    "unix",
+    "fetch"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -24,7 +30,11 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc && node build/fix-extensions.cjs && node build/cjs.cjs",
@@ -33,8 +43,11 @@
     "test": "node --test"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^4.0.0",
     "typescript": "^5",
-    "eslint": "^9"
+    "typescript-eslint": "^8.14.0"
   },
   "engines": {
     "node": ">=20"
