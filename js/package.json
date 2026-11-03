@@ -1,0 +1,42 @@
+{
+  "name": "usr",
+  "version": "0.1.0",
+  "description": "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
+  "keywords": ["http", "client", "axios", "unix", "fetch"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kingjethro999/usr.git",
+    "directory": "js"
+  },
+  "homepage": "https://github.com/kingjethro999/usr#readme",
+  "bugs": {
+    "url": "https://github.com/kingjethro999/usr/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc && node build/fix-extensions.cjs && node build/cjs.cjs",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "eslint": "^9"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "usr"
+version = "0.1.0"
+description = "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "USR project"}]
+keywords = ["http", "client", "axios", "unix"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = ["httpx>=0.24,<1"]
+
+[project.scripts]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["usr*"]
