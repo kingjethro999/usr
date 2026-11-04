@@ -2,7 +2,8 @@
 *.env
 node_modules/
 dist/
-build/
+py/build/
+!js/build/
 .next/
 __pycache__/
 *.pyc

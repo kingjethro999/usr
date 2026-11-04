@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/unixsr.svg?style=flat-square&color=cb3837)](https://www.npmjs.com/package/unixsr)
 [![PyPI version](https://img.shields.io/pypi/v/unixsr.svg?style=flat-square&color=3775a9)](https://pypi.org/project/unixsr/)
 [![CI](https://img.shields.io/github/actions/workflow/status/kingjethro999/usr/ci.yml?branch=main&style=flat-square)](https://github.com/kingjethro999/usr/actions)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?style=flat-square&logo=github)](https://github.com/sponsors/kingjethro999)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 > **Axios with a Unix vocabulary.**
@@ -273,6 +274,15 @@ Versioning follows a mechanical counter in `MAJOR.MINOR.PATCH` form (honoring bo
 - Every commit triggers an automatic mechanical bump via `.githooks/pre-commit`.
 - `PATCH` increments from 0 to 9. At 9, it resets to 0 and bumps `MINOR`.
 - `MINOR` increments from 0 to 99. At `0.99.9`, it rolls over to `1.0.0`.
+
+---
+
+## Sponsor & Support
+
+If `unixsr` helps your work, consider supporting the project:
+
+- [Support the project on GitHub Sponsors](https://github.com/sponsors/kingjethro999)
+- [Support through thanks.dev](https://thanks.dev/u/gh/kingjethro999)
 
 ---
 

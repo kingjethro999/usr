@@ -191,6 +191,14 @@ names = (
             GitHub
           </a>
           <a
+            href="https://github.com/sponsors/kingjethro999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--theme-magenta)] underline"
+          >
+            Sponsor
+          </a>
+          <a
             href={`https://www.npmjs.com/package/${versionInfo.name}`}
             target="_blank"
             rel="noopener noreferrer"

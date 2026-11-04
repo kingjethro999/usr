@@ -116,6 +116,7 @@ jobs:
         working-directory: js
         run: |
           npm ci
+          npm run build
           npm test
 
       - name: Run Python unit & cross-language parity tests

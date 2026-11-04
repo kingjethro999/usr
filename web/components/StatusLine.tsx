@@ -46,6 +46,15 @@ export function StatusLine({ theme, onCycleTheme, onOpenHelp }: StatusLineProps)
         </div>
 
         <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/sponsors/kingjethro999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline cursor-pointer text-[var(--theme-yellow)] hidden sm:inline"
+            title="Support this project on GitHub Sponsors"
+          >
+            [sponsor]
+          </a>
           <button
             onClick={onCycleTheme}
             className="hover:underline cursor-pointer"
