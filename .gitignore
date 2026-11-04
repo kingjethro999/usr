@@ -6,5 +6,6 @@ build/
 .next/
 __pycache__/
 *.pyc
+*.egg-info/
 .env.local
 .env.*.local

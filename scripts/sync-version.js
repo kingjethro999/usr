@@ -43,6 +43,9 @@ export function syncVersion() {
     fs.writeFileSync(pyProjectPath, pyContent, "utf8");
   }
 
+  // 4. Root VERSION file (matching zyrk pattern: vX.Y.Z)
+  fs.writeFileSync(path.join(rootDir, "VERSION"), `v${version}\n`, "utf8");
+
   return versionInfo;
 }
 

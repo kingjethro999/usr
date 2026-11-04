@@ -82,6 +82,10 @@ jobs:
       - name: Test version rollover logic
         run: node --test test/version.test.js
 
+      - name: Verify VERSION file matches version.json
+        run: |
+          test "$(cat VERSION)" = "v$(node -e "console.log(require('./version.json').version)")"
+
   release:
     name: Automated Release & Publish
     needs: quality-gate
@@ -123,7 +127,7 @@ jobs:
       - name: Commit release bump and tag
         run: |
           VERSION="${{ steps.bump.outputs.version }}"
-          git add version.json js/package.json py/pyproject.toml web/package.json
+          git add VERSION version.json js/package.json py/pyproject.toml web/package.json web/version.json
           git commit -m "chore(release): v${VERSION} [skip ci]"
           git tag "v${VERSION}"
           git push origin main --tags

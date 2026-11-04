@@ -29,6 +29,11 @@ export function getNextVersion(currentVersion) {
   return `${major}.${minor}.${patch}`;
 }
 
+export function nextVersion(currentVersion) {
+  const clean = currentVersion.trim().replace(/^v/, "");
+  return getNextVersion(clean);
+}
+
 export function bumpVersionFile() {
   const raw = fs.readFileSync(versionJsonPath, "utf8");
   const data = JSON.parse(raw);
