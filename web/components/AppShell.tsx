@@ -4,10 +4,12 @@ import { useEffect, useState, ReactNode } from "react";
 import { useThemeState } from "../app/theme";
 import { StatusLine } from "./StatusLine";
 import { ShortcutsHelp } from "./ShortcutsHelp";
+import { SearchModal } from "./SearchModal";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { theme, cycleTheme } = useThemeState();
   const [helpOpen, setHelpOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [shortcutsEnabled, setShortcutsEnabled] = useState(true);
 
   useEffect(() => {
@@ -22,18 +24,24 @@ export function AppShell({ children }: { children: ReactNode }) {
       ) {
         if (e.key === "Escape") {
           target.blur();
+          setSearchOpen(false);
+          setHelpOpen(false);
         }
         return;
       }
 
       if (e.key === "Escape") {
         setHelpOpen(false);
+        setSearchOpen(false);
         return;
       }
 
       if (!shortcutsEnabled) return;
 
-      if (e.key === "?") {
+      if (e.key === "/") {
+        e.preventDefault();
+        setSearchOpen(true);
+      } else if (e.key === "?") {
         e.preventDefault();
         setHelpOpen((prev) => !prev);
       } else if (e.key === "t") {
@@ -64,6 +72,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         onClose={() => setHelpOpen(false)}
         shortcutsEnabled={shortcutsEnabled}
         onToggleShortcuts={() => setShortcutsEnabled((prev) => !prev)}
+      />
+      <SearchModal
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
       />
       <main className="w-full flex-grow">{children}</main>
     </>
