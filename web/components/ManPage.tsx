@@ -77,6 +77,30 @@ export function ManPage({ command }: ManPageProps) {
           </div>
         </section>
 
+        {/* IMPORTS */}
+        {command.imports && (
+          <section className="space-y-2">
+            <h2 className="font-bold text-[var(--theme-fg)] text-xs">IMPORT CONVENTIONS</h2>
+            <div className="pl-4 sm:pl-7 space-y-2">
+              <div className="text-[11px] text-[var(--theme-dim)]">
+                {lang === "js"
+                  ? "Import either all commands as a namespace or individual named functions:"
+                  : "Import everything safely into module scope or use the usr namespace:"}
+              </div>
+              <div className="space-y-1.5">
+                {(lang === "js" ? command.imports.js : command.imports.python).map((snippet, idx) => (
+                  <pre
+                    key={idx}
+                    className="text-xs bg-[var(--theme-dim)]/5 border-l-2 border-[var(--theme-green)] p-2 text-[var(--theme-fg)] overflow-x-auto"
+                  >
+                    {snippet}
+                  </pre>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* DESCRIPTION */}
         <section className="space-y-1">
           <h2 className="font-bold text-[var(--theme-fg)] text-xs">DESCRIPTION</h2>
