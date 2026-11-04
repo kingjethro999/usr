@@ -1,24 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore, useCallback } from "react";
 
 export type CodeLang = "js" | "python";
 
-export function useCodeLang() {
-  const [lang, setLang] = useState<CodeLang>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("usr-lang") as CodeLang | null;
-      if (saved === "js" || saved === "python") {
-        return saved;
-      }
-    }
-    return "js";
-  });
-
-  const switchLang = (newLang: CodeLang) => {
-    setLang(newLang);
-    localStorage.setItem("usr-lang", newLang);
+function subscribeLang(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("storage", callback);
+  window.addEventListener("usr-lang-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("usr-lang-change", callback);
   };
+}
+
+function getLangSnapshot(): CodeLang {
+  if (typeof window === "undefined") return "js";
+  const saved = localStorage.getItem("usr-lang") as CodeLang | null;
+  return saved === "js" || saved === "python" ? saved : "js";
+}
+
+function getLangServerSnapshot(): CodeLang {
+  return "js";
+}
+
+export function useCodeLang() {
+  const lang = useSyncExternalStore(
+    subscribeLang,
+    getLangSnapshot,
+    getLangServerSnapshot
+  );
+
+  const switchLang = useCallback((newLang: CodeLang) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("usr-lang", newLang);
+      window.dispatchEvent(new Event("usr-lang-change"));
+    }
+  }, []);
 
   return { lang, switchLang };
 }
@@ -34,6 +52,7 @@ export function LanguageSwitch({
     <div className="flex items-center gap-2 text-xs font-mono select-none">
       <button
         onClick={() => onSwitch("js")}
+        suppressHydrationWarning
         className={`px-1 cursor-pointer ${
           lang === "js"
             ? "bg-[var(--theme-fg)] text-[var(--theme-bg)] font-bold"
@@ -44,6 +63,7 @@ export function LanguageSwitch({
       </button>
       <button
         onClick={() => onSwitch("python")}
+        suppressHydrationWarning
         className={`px-1 cursor-pointer ${
           lang === "python"
             ? "bg-[var(--theme-fg)] text-[var(--theme-bg)] font-bold"

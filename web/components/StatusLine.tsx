@@ -50,6 +50,7 @@ export function StatusLine({ theme, onCycleTheme, onOpenHelp }: StatusLineProps)
             onClick={onCycleTheme}
             className="hover:underline cursor-pointer"
             title="Cycle theme (Shortcut: t)"
+            suppressHydrationWarning
           >
             [{theme}]
           </button>
