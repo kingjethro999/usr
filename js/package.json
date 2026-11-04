@@ -1,6 +1,6 @@
 {
-  "name": "usr-http",
-  "version": "0.1.0",
+  "name": "unixsr",
+  "version": "0.0.2",
   "description": "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
   "keywords": [
     "http",

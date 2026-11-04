@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+# Every commit bumps the mechanical version across JS, Python, and Web.
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
+  node scripts/bump-version.js
+  git add VERSION version.json js/package.json py/pyproject.toml web/version.json web/package.json
+fi

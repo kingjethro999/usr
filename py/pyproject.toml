@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "usr-http"
-version = "0.1.0"
-description = "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client"
+name = "unixsr"
+version = "0.0.2"
+description = "UNIXSR: Unix Style Request — Axios with a Unix vocabulary HTTP client"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-authors = [{name = "USR project"}]
-keywords = ["http", "client", "axios", "unix"]
+authors = [{name = "Unix Style Request Project"}]
+keywords = ["http", "client", "axios", "unix", "unixsr", "usr"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -25,4 +25,4 @@ dependencies = ["httpx>=0.24,<1"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["usr*"]
+include = ["unixsr*", "usr*"]

@@ -44,7 +44,9 @@ export function bumpVersionFile() {
   return next;
 }
 
-if (process.argv[1] === __filename) {
+const invokedPath =
+  process.argv[1] === undefined ? undefined : path.resolve(process.argv[1]);
+if (invokedPath === __filename) {
   const next = bumpVersionFile();
   console.log(`Bumped version to ${next}`);
 }

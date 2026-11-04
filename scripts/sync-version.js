@@ -49,7 +49,9 @@ export function syncVersion() {
   return versionInfo;
 }
 
-if (process.argv[1] === __filename) {
+const invokedPath =
+  process.argv[1] === undefined ? undefined : path.resolve(process.argv[1]);
+if (invokedPath === __filename) {
   const res = syncVersion();
   console.log(`Synced version ${res.version} and name ${res.name} across workspaces.`);
 }
