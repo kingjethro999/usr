@@ -75,10 +75,10 @@ describe("tee passes through and runs side effect", () => {
   it("side effect", () => assert.deepStrictEqual(seen, [1, 2]));
 });
 
-describe("UsrError carries code/status/response", async () => {
-  await withServer(async (base) => {
-    const c = usr.cd(base);
-    it("404 throws ERR_BAD_REQUEST", async () => {
+describe("UsrError carries code/status/response", () => {
+  it("404 throws ERR_BAD_REQUEST", async () => {
+    await withServer(async (base) => {
+      const c = usr.cd(base);
       try {
         await c.cat(`${base}/missing`);
         assert.fail("should have thrown");
