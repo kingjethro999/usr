@@ -1,7 +1,7 @@
 {
   "name": "unixsr",
-  "version": "0.0.5",
-  "description": "USR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
+  "version": "0.0.6",
+  "description": "USR: Unix Style Request \u2014 Axios with a Unix vocabulary HTTP client",
   "keywords": [
     "http",
     "client",
@@ -37,7 +37,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc && node build/fix-extensions.cjs && node build/cjs.cjs",
+    "build": "node init && tsc && node build/fix-extensions.cjs && node build/cjs.cjs",
     "pretest": "npm run build",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
