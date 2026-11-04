@@ -127,6 +127,7 @@ def parse_flags_string(input: str) -> dict:
                 raise ValueError(f"Invalid header: {hdr}")
             h[hdr[:idx].strip()] = hdr[idx + 1 :].strip()
         flags["header"] = h
+        flags["headers"] = h
     if queries:
         p = {}
         for q in queries:
@@ -136,6 +137,9 @@ def parse_flags_string(input: str) -> dict:
             else:
                 p[q[:idx]] = q[idx + 1 :]
         flags["query"] = p
+        flags["params"] = p
+    if "max-time" in flags:
+        flags["timeout"] = flags["max-time"]
     if url:
         flags["url"] = url
     return flags
@@ -208,3 +212,6 @@ def normalize_flags(flags: dict) -> dict:
         if k not in FLAG_MAP.values() and k not in ("url",):
             cfg.setdefault(k, v)
     return cfg
+
+
+parse_flag_string = parse_flags_string

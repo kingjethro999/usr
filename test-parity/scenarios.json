@@ -1,0 +1,119 @@
+{
+  "commands": [
+    { "command": "cat", "method": "GET", "hasBody": false },
+    { "command": "touch", "method": "POST", "hasBody": true },
+    { "command": "mv", "method": "PUT", "hasBody": true },
+    { "command": "sed", "method": "PATCH", "hasBody": true },
+    { "command": "rm", "method": "DELETE", "hasBody": false },
+    { "command": "stat", "method": "HEAD", "hasBody": false },
+    { "command": "man", "method": "OPTIONS", "hasBody": false }
+  ],
+  "flag_strings": [
+    {
+      "input": "-H 'Authorization: Bearer token123' -m 15 -q sort=asc https://api.site.com/items",
+      "expected_url": "https://api.site.com/items",
+      "expected_headers": { "Authorization": "Bearer token123" },
+      "expected_timeout": 15,
+      "expected_params": { "sort": "asc" }
+    },
+    {
+      "input": "-q a=1 -q b=2 https://example.org/test",
+      "expected_url": "https://example.org/test",
+      "expected_params": { "a": "1", "b": "2" }
+    }
+  ],
+  "pipe_tests": [
+    {
+      "name": "grep_dict",
+      "stage": "grep",
+      "arg": { "active": true },
+      "input": [
+        { "id": 1, "name": "Ada", "active": true },
+        { "id": 2, "name": "Bob", "active": false },
+        { "id": 3, "name": "Carol", "active": true }
+      ],
+      "expected": [
+        { "id": 1, "name": "Ada", "active": true },
+        { "id": 3, "name": "Carol", "active": true }
+      ]
+    },
+    {
+      "name": "grep_string",
+      "stage": "grep",
+      "arg": "Alice",
+      "input": [
+        { "name": "Alice Smith", "dept": "Eng" },
+        { "name": "Bob Jones", "dept": "Sales" },
+        { "name": "Alice Cooper", "dept": "Music" }
+      ],
+      "expected": [
+        { "name": "Alice Smith", "dept": "Eng" },
+        { "name": "Alice Cooper", "dept": "Music" }
+      ]
+    },
+    {
+      "name": "head_2",
+      "stage": "head",
+      "arg": 2,
+      "input": [10, 20, 30, 40],
+      "expected": [10, 20]
+    },
+    {
+      "name": "tail_2",
+      "stage": "tail",
+      "arg": 2,
+      "input": [10, 20, 30, 40],
+      "expected": [30, 40]
+    },
+    {
+      "name": "sort_by_key",
+      "stage": "sort",
+      "arg": "age",
+      "input": [
+        { "name": "Eve", "age": 30 },
+        { "name": "Dan", "age": 20 },
+        { "name": "Frank", "age": 25 }
+      ],
+      "expected": [
+        { "name": "Dan", "age": 20 },
+        { "name": "Frank", "age": 25 },
+        { "name": "Eve", "age": 30 }
+      ]
+    },
+    {
+      "name": "uniq_by_key",
+      "stage": "uniq",
+      "arg": "group",
+      "input": [
+        { "id": 1, "group": "A" },
+        { "id": 2, "group": "B" },
+        { "id": 3, "group": "A" },
+        { "id": 4, "group": "C" }
+      ],
+      "expected": [
+        { "id": 1, "group": "A" },
+        { "id": 2, "group": "B" },
+        { "id": 4, "group": "C" }
+      ]
+    },
+    {
+      "name": "cut_fields",
+      "stage": "cut",
+      "arg": ["name", "role"],
+      "input": [
+        { "id": 1, "name": "Grace", "role": "admin", "secret": "xyz" },
+        { "id": 2, "name": "Heidi", "role": "user", "secret": "abc" }
+      ],
+      "expected": [
+        { "name": "Grace", "role": "admin" },
+        { "name": "Heidi", "role": "user" }
+      ]
+    },
+    {
+      "name": "wc_count",
+      "stage": "wc",
+      "input": ["apple", "banana", "cherry"],
+      "expected": 3
+    }
+  ]
+}

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from ._client import Response, UsrClient, cd, defaults, create_usr
 from ._error import UsrError
-from ._flags import normalize_flags, parse_flags_string
+from ._flags import normalize_flags, parse_flags_string, parse_flag_string
 from ._pipe import PipeError, cut, grep, head, pipeable, sort, tail, tee, uniq, wc, xargs
 from . import _async as aio
 
@@ -49,6 +49,7 @@ __all__ = [
     "defaults",
     "UsrError",
     "parse_flags_string",
+    "parse_flag_string",
     "normalize_flags",
     "pipeable",
     "PipeError",
