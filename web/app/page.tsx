@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Terminal } from "../components/Terminal";
+import { InstallSection } from "../components/InstallSection";
 import versionInfo from "../version.json";
 
 export const metadata = {
@@ -167,21 +168,7 @@ names = (
       </section>
 
       {/* 6. Install */}
-      <section id="install" className="space-y-4">
-        <h2 className="text-sm font-bold text-[var(--theme-fg)] border-b border-[var(--theme-dim)] pb-1">
-          $ npm i {versionInfo.name} &amp;&amp; pip install {versionInfo.name}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="border border-[var(--theme-dim)] p-3">
-            <div className="text-[var(--theme-dim)] text-[10px] mb-1">npm (Node 20+, browsers, runtimes)</div>
-            <code className="text-[var(--theme-green)] select-all">$ npm i {versionInfo.name}</code>
-          </div>
-          <div className="border border-[var(--theme-dim)] p-3">
-            <div className="text-[var(--theme-dim)] text-[10px] mb-1">PyPI (Python 3.10+)</div>
-            <code className="text-[var(--theme-green)] select-all">$ pip install {versionInfo.name}</code>
-          </div>
-        </div>
-      </section>
+      <InstallSection packageName={versionInfo.name} />
 
       {/* 7. Footer */}
       <footer className="pt-8 border-t border-[var(--theme-dim)] text-xs text-[var(--theme-dim)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -197,6 +184,22 @@ names = (
             className="text-[var(--theme-blue)] underline"
           >
             GitHub
+          </a>
+          <a
+            href={`https://www.npmjs.com/package/${versionInfo.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--theme-yellow)] underline"
+          >
+            npm
+          </a>
+          <a
+            href={`https://pypi.org/project/${versionInfo.name}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--theme-green)] underline"
+          >
+            PyPI
           </a>
           <span>MIT License</span>
           <span>v{versionInfo.version}</span>
