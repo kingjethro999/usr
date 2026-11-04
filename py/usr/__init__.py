@@ -21,6 +21,8 @@ sed = _client.sed
 rm = _client.rm
 stat = _client.stat
 man = _client.man
+trap = _client.trap
+untrap = _client.untrap
 
 
 def request(config: dict) -> Response:
@@ -36,6 +38,8 @@ __all__ = [
     "stat",
     "man",
     "request",
+    "trap",
+    "untrap",
     "grep",
     "head",
     "tail",
