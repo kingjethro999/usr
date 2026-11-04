@@ -1,6 +1,6 @@
 {
   "name": "unixsr-monorepo",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "description": "UNIXSR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
   "type": "module",
