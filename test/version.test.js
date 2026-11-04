@@ -30,7 +30,9 @@ describe("version rollover rules", () => {
   });
   it("root VERSION file matches version.json with v prefix", () => {
     const rootDir = path.resolve(import.meta.dirname, "..");
-    const versionJson = JSON.parse(fs.readFileSync(path.join(rootDir, "version.json"), "utf8"));
+    const versionJson = JSON.parse(
+      fs.readFileSync(path.join(rootDir, "version.json"), "utf8"),
+    );
     const versionFile = fs.readFileSync(path.join(rootDir, "VERSION"), "utf8").trim();
     assert.strictEqual(versionFile, `v${versionJson.version}`);
   });

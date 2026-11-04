@@ -1,5 +1,17 @@
-import { networkError, timeoutError, badRequestError, canceledError, tooManyRedirectsError } from "./error";
-import { resolveURL, appendQuery, normalizeHeaders, serializeBody, validateStatusDefault } from "./config";
+import {
+  networkError,
+  timeoutError,
+  badRequestError,
+  canceledError,
+  tooManyRedirectsError,
+} from "./error";
+import {
+  resolveURL,
+  appendQuery,
+  normalizeHeaders,
+  serializeBody,
+  validateStatusDefault,
+} from "./config";
 import type { UsrConfig, UsrResponse } from "./types";
 import { UsrError } from "./error";
 
@@ -13,7 +25,7 @@ function headersToObj(headers: Headers): Record<string, string> {
 
 export async function dispatch(config: UsrConfig): Promise<UsrResponse> {
   const url = appendQuery(resolveURL(config.baseURL, String(config.url)), config.params);
-  const headers = normalizeHeaders({ "accept": "application/json", ...config.headers });
+  const headers = normalizeHeaders({ accept: "application/json", ...config.headers });
   const { body, headers: bodyHeaders } = serializeBody(config.data, headers);
 
   const controller = new AbortController();
@@ -84,7 +96,11 @@ export async function dispatch(config: UsrConfig): Promise<UsrResponse> {
   };
 
   if (config.transformResponse) {
-    try { res.data = config.transformResponse(String(res.data), res.headers); } catch { /* keep raw */ }
+    try {
+      res.data = config.transformResponse(String(res.data), res.headers);
+    } catch {
+      /* keep raw */
+    }
   }
 
   if (!validateStatus(status)) {

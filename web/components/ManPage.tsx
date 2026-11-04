@@ -14,7 +14,8 @@ export function ManPage({ command }: ManPageProps) {
 
   const currentIndex = COMMAND_LIST.indexOf(command.cmd);
   const prevCmd = currentIndex > 0 ? COMMAND_LIST[currentIndex - 1] : null;
-  const nextCmd = currentIndex < COMMAND_LIST.length - 1 ? COMMAND_LIST[currentIndex + 1] : null;
+  const nextCmd =
+    currentIndex < COMMAND_LIST.length - 1 ? COMMAND_LIST[currentIndex + 1] : null;
 
   return (
     <div className="max-w-[100ch] mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-4 gap-8 font-mono text-sm">
@@ -24,10 +25,7 @@ export function ManPage({ command }: ManPageProps) {
           $ ls man/
         </div>
         <nav className="flex flex-col space-y-1 text-xs">
-          <Link
-            href="/man"
-            className="hover:underline text-[var(--theme-blue)]"
-          >
+          <Link href="/man" className="hover:underline text-[var(--theme-blue)]">
             [index]
           </Link>
           {COMMAND_LIST.map((cmd) => (
@@ -54,16 +52,21 @@ export function ManPage({ command }: ManPageProps) {
       <article className="md:col-span-3 space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center border-b border-[var(--theme-dim)] pb-2 text-xs font-bold text-[var(--theme-dim)]">
-          <span>{command.cmd.toUpperCase()}({command.section})</span>
+          <span>
+            {command.cmd.toUpperCase()}({command.section})
+          </span>
           <span>{versionInfo.name.toUpperCase()} MANUAL</span>
-          <span>{command.cmd.toUpperCase()}({command.section})</span>
+          <span>
+            {command.cmd.toUpperCase()}({command.section})
+          </span>
         </div>
 
         {/* NAME */}
         <section className="space-y-1">
           <h2 className="font-bold text-[var(--theme-fg)] text-xs">NAME</h2>
           <p className="pl-4 sm:pl-7 text-[var(--theme-fg)]">
-            <span className="font-bold text-[var(--theme-green)]">{command.cmd}</span> — {command.summary}
+            <span className="font-bold text-[var(--theme-green)]">{command.cmd}</span> —{" "}
+            {command.summary}
           </p>
         </section>
 
@@ -80,7 +83,9 @@ export function ManPage({ command }: ManPageProps) {
         {/* IMPORTS */}
         {command.imports && (
           <section className="space-y-2">
-            <h2 className="font-bold text-[var(--theme-fg)] text-xs">IMPORT CONVENTIONS</h2>
+            <h2 className="font-bold text-[var(--theme-fg)] text-xs">
+              IMPORT CONVENTIONS
+            </h2>
             <div className="pl-4 sm:pl-7 space-y-2">
               <div className="text-[11px] text-[var(--theme-dim)]">
                 {lang === "js"
@@ -88,14 +93,16 @@ export function ManPage({ command }: ManPageProps) {
                   : "Import everything safely into module scope or use the usr namespace:"}
               </div>
               <div className="space-y-1.5">
-                {(lang === "js" ? command.imports.js : command.imports.python).map((snippet, idx) => (
-                  <pre
-                    key={idx}
-                    className="text-xs bg-[var(--theme-dim)]/5 border-l-2 border-[var(--theme-green)] p-2 text-[var(--theme-fg)] overflow-x-auto"
-                  >
-                    {snippet}
-                  </pre>
-                ))}
+                {(lang === "js" ? command.imports.js : command.imports.python).map(
+                  (snippet, idx) => (
+                    <pre
+                      key={idx}
+                      className="text-xs bg-[var(--theme-dim)]/5 border-l-2 border-[var(--theme-green)] p-2 text-[var(--theme-fg)] overflow-x-auto"
+                    >
+                      {snippet}
+                    </pre>
+                  ),
+                )}
               </div>
             </div>
           </section>
@@ -115,7 +122,9 @@ export function ManPage({ command }: ManPageProps) {
           <dl className="pl-4 sm:pl-7 space-y-3">
             {command.options.map((opt) => (
               <div key={opt.flag} className="space-y-1">
-                <dt className="text-[var(--theme-magenta)] font-bold text-xs">{opt.flag}</dt>
+                <dt className="text-[var(--theme-magenta)] font-bold text-xs">
+                  {opt.flag}
+                </dt>
                 <dd className="pl-4 text-xs text-[var(--theme-fg)]">{opt.desc}</dd>
               </div>
             ))}
@@ -128,7 +137,9 @@ export function ManPage({ command }: ManPageProps) {
           <div className="pl-4 sm:pl-7 space-y-4">
             {command.examples.map((ex, idx) => (
               <div key={idx} className="space-y-1">
-                <div className="text-xs text-[var(--theme-dim)] font-bold">{ex.title}:</div>
+                <div className="text-xs text-[var(--theme-dim)] font-bold">
+                  {ex.title}:
+                </div>
                 <pre className="text-xs border-l-2 border-[var(--theme-dim)] pl-3 py-1 text-[var(--theme-fg)] overflow-x-auto">
                   {lang === "js" ? ex.js : ex.python}
                 </pre>
@@ -143,7 +154,9 @@ export function ManPage({ command }: ManPageProps) {
           <dl className="pl-4 sm:pl-7 space-y-2 text-xs">
             {command.errors.map((err) => (
               <div key={err.code} className="flex gap-2">
-                <dt className="text-[var(--theme-yellow)] font-bold min-w-[120px]">{err.code}</dt>
+                <dt className="text-[var(--theme-yellow)] font-bold min-w-[120px]">
+                  {err.code}
+                </dt>
                 <dd className="text-[var(--theme-fg)]">{err.desc}</dd>
               </div>
             ))}

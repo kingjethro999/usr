@@ -41,11 +41,15 @@ class UsrClient implements UsrInstance {
   }
 
   cat = (url: string, options?: UsrConfig) => this._call("cat", url, undefined, options);
-  touch = (url: string, data?: unknown, options?: UsrConfig) => this._call("touch", url, data, options);
-  mv = (url: string, data?: unknown, options?: UsrConfig) => this._call("mv", url, data, options);
-  sed = (url: string, data?: unknown, options?: UsrConfig) => this._call("sed", url, data, options);
+  touch = (url: string, data?: unknown, options?: UsrConfig) =>
+    this._call("touch", url, data, options);
+  mv = (url: string, data?: unknown, options?: UsrConfig) =>
+    this._call("mv", url, data, options);
+  sed = (url: string, data?: unknown, options?: UsrConfig) =>
+    this._call("sed", url, data, options);
   rm = (url: string, options?: UsrConfig) => this._call("rm", url, undefined, options);
-  stat = (url: string, options?: UsrConfig) => this._call("stat", url, undefined, options);
+  stat = (url: string, options?: UsrConfig) =>
+    this._call("stat", url, undefined, options);
   man = (url: string, options?: UsrConfig) => this._call("man", url, undefined, options);
 
   request = (config: UsrConfig & { method: string }): Promise<UsrResponse> => {
@@ -56,7 +60,12 @@ class UsrClient implements UsrInstance {
       .then(async (r) => this.withPipe(await this.runResponseTraps(r)));
   };
 
-  private _call(method: MethodLike, url: string, data: unknown, options?: UsrConfig): Promise<UsrResponse> {
+  private _call(
+    method: MethodLike,
+    url: string,
+    data: unknown,
+    options?: UsrConfig,
+  ): Promise<UsrResponse> {
     const base = mergeConfig(this.defaults, options ?? {});
     const config: UsrConfig = { ...base, url, method: METHOD_BY_COMMAND[method] };
     if (data !== undefined && !NO_BODY_METHODS.has(method)) config.data = data;
@@ -69,12 +78,23 @@ class UsrClient implements UsrInstance {
 
   private withPipe(res: UsrResponse): UsrResponse {
     const p = pipeable(res.data);
-    (res as UsrResponse & { pipe: (stage: (input: unknown) => unknown) => unknown }).pipe = (stage) => p.pipe(stage);
+    (
+      res as UsrResponse & { pipe: (stage: (input: unknown) => unknown) => unknown }
+    ).pipe = (stage) => p.pipe(stage);
     return res;
   }
 
-  trap(kind: "request" | "response", fn: (value: unknown) => unknown, options: { synchronous?: boolean; runWhen?: (config: UsrConfig) => boolean } = {}): { eject: () => void } {
-    const entry: TrapEntry = { kind, fn, synchronous: options.synchronous, runWhen: options.runWhen };
+  trap(
+    kind: "request" | "response",
+    fn: (value: unknown) => unknown,
+    options: { synchronous?: boolean; runWhen?: (config: UsrConfig) => boolean } = {},
+  ): { eject: () => void } {
+    const entry: TrapEntry = {
+      kind,
+      fn,
+      synchronous: options.synchronous,
+      runWhen: options.runWhen,
+    };
     this.traps.push(entry);
     return {
       eject: () => {
@@ -89,7 +109,9 @@ class UsrClient implements UsrInstance {
   }
 
   cd(baseUrl: string, options?: UsrConfig): UsrInstance {
-    const next = new UsrClient(mergeConfig(this.defaults, { baseURL: baseUrl, ...options }));
+    const next = new UsrClient(
+      mergeConfig(this.defaults, { baseURL: baseUrl, ...options }),
+    );
     next.traps = [...this.traps];
     return next;
   }

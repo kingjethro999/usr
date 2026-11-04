@@ -30,7 +30,7 @@ export function useThemeState() {
   const theme = useSyncExternalStore(
     subscribeTheme,
     getThemeSnapshot,
-    getThemeServerSnapshot
+    getThemeServerSnapshot,
   );
 
   useEffect(() => {

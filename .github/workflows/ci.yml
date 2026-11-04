@@ -1,21 +1,134 @@
-name: CI/CD
+name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  quality-gate:
-    name: Quality Gate (JS, Python, Web)
+  code-style:
+    name: Code Style (Prettier)
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Verify Prettier formatting
+        run: npm run format:check
+
+  lint-and-typecheck:
+    name: Lint & Typecheck (JS, Python, Web)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.16.1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install JS dependencies
+        working-directory: js
+        run: npm ci
+
+      - name: Lint and typecheck JS
+        working-directory: js
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Install Web dependencies
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Web application
+        working-directory: web
+        run: pnpm lint
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx mypy
+
+      - name: Typecheck Python with mypy
+        working-directory: py
+        run: mypy unixsr usr
+
+  test:
+    name: Test & Parity (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify VERSION file consistency
+        run: |
+          test "$(cat VERSION)" = "v$(node -e "console.log(require('./version.json').version)")"
+
+      - name: Run version rollover logic tests
+        run: node --test test/version.test.js
+
+      - name: Run JS unit & cross-language parity tests
+        working-directory: js
+        run: |
+          npm ci
+          npm test
+
+      - name: Run Python unit & cross-language parity tests
+        working-directory: py
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx
+          python -m unittest -v test_usr.py test_parity.py
+
+  build:
+    name: Build Artifacts (JS, Python, Web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
@@ -36,125 +149,39 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install JS dependencies
-        working-directory: js
-        run: npm ci
-
-      - name: Lint and typecheck JS
+      - name: Build JS package (ESM & CJS)
         working-directory: js
         run: |
-          npm run lint
-          npm run typecheck
+          npm ci
+          npm run build
 
-      - name: Build JS package
-        working-directory: js
-        run: npm run build
-
-      - name: Test JS package & parity
-        working-directory: js
-        run: npm test
-
-      - name: Install Python dependencies
+      - name: Build Python distribution (sdist & wheel)
+        working-directory: py
         run: |
-          python -m pip install --upgrade pip
-          pip install httpx mypy
-
-      - name: Typecheck Python with mypy
-        working-directory: py
-        run: mypy usr
-
-      - name: Run Python unit & parity tests
-        working-directory: py
-        run: python -m unittest -v test_usr.py test_parity.py
-
-      - name: Install Web dependencies
-        working-directory: web
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint Web application
-        working-directory: web
-        run: pnpm lint
+          python -m pip install --upgrade pip build
+          python -m build
 
       - name: Build Web application
         working-directory: web
-        run: pnpm build
-
-      - name: Test version rollover logic
-        run: node --test test/version.test.js
-
-      - name: Verify VERSION file matches version.json
         run: |
-          test "$(cat VERSION)" = "v$(node -e "console.log(require('./version.json').version)")"
+          pnpm install --frozen-lockfile
+          pnpm build
 
-  release:
-    name: Automated Release & Publish
-    needs: quality-gate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]')
+  security-audit:
+    name: Security & Dependency Audit
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Audit root dependencies
+        run: npm audit --audit-level=high
 
-      - name: Configure Git identity
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump mechanical version
-        id: bump
-        run: |
-          node scripts/bump-version.js
-          VERSION=$(node -e "console.log(require('./version.json').version)")
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-
-      - name: Commit release bump and tag
-        run: |
-          VERSION="${{ steps.bump.outputs.version }}"
-          git add VERSION version.json js/package.json py/pyproject.toml web/package.json web/version.json
-          git commit -m "chore(release): v${VERSION} [skip ci]"
-          git tag "v${VERSION}"
-          git push origin main --tags
-
-      - name: Build JS distribution
+      - name: Audit JS dependencies
         working-directory: js
-        run: |
-          npm ci
-          npm run build
-
-      - name: Build Python distribution (wheel & sdist)
-        working-directory: py
-        run: |
-          python -m pip install --upgrade pip build
-          python -m build
-
-      - name: Publish to npm (Provenance / OIDC)
-        if: env.NPM_TOKEN != ''
-        working-directory: js
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm publish --provenance --access public || echo "Version already published on npm, skipping."
-
-      - name: Publish to PyPI (OIDC trusted publishing)
-        uses: pypa/gh-action-pypi-publish@release/v1
-        continue-on-error: true
-        with:
-          packages-dir: py/dist/
-          skip-existing: true
+        run: npm audit --audit-level=high

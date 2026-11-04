@@ -26,7 +26,10 @@ export function ShortcutsHelp({
       >
         <div className="flex justify-between items-center border-b border-[var(--theme-dim)] pb-2 font-bold">
           <span>KEYBOARD SHORTCUTS</span>
-          <button onClick={onClose} className="hover:bg-[var(--theme-fg)] hover:text-[var(--theme-bg)] px-1">
+          <button
+            onClick={onClose}
+            className="hover:bg-[var(--theme-fg)] hover:text-[var(--theme-bg)] px-1"
+          >
             [Esc]
           </button>
         </div>

@@ -55,18 +55,18 @@ pip install unixsr
 
 ## The Command Vocabulary
 
-| Command | HTTP Verb | Mnemonic / Behavior | Request Body? | Safe? | Idempotent? |
-|---|---|---|---|---|---|
-| `cat` | **GET** | Read a remote resource | No | Yes | Yes |
-| `touch` | **POST** | Create something new or submit | Yes | No | No |
-| `mv` | **PUT** | Replace or move a resource | Yes | No | Yes |
-| `sed` | **PATCH** | Edit a resource in place | Yes | No | No |
-| `rm` | **DELETE** | Remove a remote resource | No | No | Yes |
-| `stat` | **HEAD** | Metadata only (headers, no body) | No | Yes | Yes |
-| `man` | **OPTIONS** | Discover allowed capabilities (`Allow`) | No | Yes | Yes |
-| `request` | *CUSTOM* | Generic Axios-style escape hatch | Config | Config | Config |
+| Command   | HTTP Verb   | Mnemonic / Behavior                     | Request Body? | Safe?  | Idempotent? |
+| --------- | ----------- | --------------------------------------- | ------------- | ------ | ----------- |
+| `cat`     | **GET**     | Read a remote resource                  | No            | Yes    | Yes         |
+| `touch`   | **POST**    | Create something new or submit          | Yes           | No     | No          |
+| `mv`      | **PUT**     | Replace or move a resource              | Yes           | No     | Yes         |
+| `sed`     | **PATCH**   | Edit a resource in place                | Yes           | No     | No          |
+| `rm`      | **DELETE**  | Remove a remote resource                | No            | No     | Yes         |
+| `stat`    | **HEAD**    | Metadata only (headers, no body)        | No            | Yes    | Yes         |
+| `man`     | **OPTIONS** | Discover allowed capabilities (`Allow`) | No            | Yes    | Yes         |
+| `request` | _CUSTOM_    | Generic Axios-style escape hatch        | Config        | Config | Config      |
 
-> *Note:* `head` is reserved for the pipe stage that extracts the first N items. HTTP `HEAD` is `stat`.
+> _Note:_ `head` is reserved for the pipe stage that extracts the first N items. HTTP `HEAD` is `stat`.
 
 ---
 
@@ -119,18 +119,18 @@ users = await aio.cat("https://api.site.com/users")
 
 Flags mirror curl options you already know. Every flag can be passed as an options object/kwargs or as a single command-line string:
 
-| Flag | Long Form | Description |
-|---|---|---|
-| `-H` | `--header` | Add custom header (repeatable) |
-| `-d` | `--data` | Request body payload |
-| `-u` | `--user` | HTTP Basic Auth (`user:password`) |
-| `-m` | `--max-time` | Timeout in seconds |
-| `-L` | `--location` | Follow redirects |
-| `-o` | `--output` | Save response body to local disk |
-| `-q` | `--query` | Add URL query parameter (`k=v`, repeatable) |
-| `-s` | `--silent` | Suppress log output |
-| `-v` | `--verbose` | Log details (credentials redacted) |
-| | `--ok` | Accept any status code (200–599) without throwing |
+| Flag | Long Form    | Description                                       |
+| ---- | ------------ | ------------------------------------------------- |
+| `-H` | `--header`   | Add custom header (repeatable)                    |
+| `-d` | `--data`     | Request body payload                              |
+| `-u` | `--user`     | HTTP Basic Auth (`user:password`)                 |
+| `-m` | `--max-time` | Timeout in seconds                                |
+| `-L` | `--location` | Follow redirects                                  |
+| `-o` | `--output`   | Save response body to local disk                  |
+| `-q` | `--query`    | Add URL query parameter (`k=v`, repeatable)       |
+| `-s` | `--silent`   | Suppress log output                               |
+| `-v` | `--verbose`  | Log details (credentials redacted)                |
+|      | `--ok`       | Accept any status code (200–599) without throwing |
 
 ### JavaScript
 
@@ -143,7 +143,9 @@ await usr.cat("https://api.site.com/users", {
 });
 
 // Command-line string syntax
-await usr.cat("-H 'Authorization: Bearer SECRET' -q active=true -m 5 https://api.site.com/users");
+await usr.cat(
+  "-H 'Authorization: Bearer SECRET' -q active=true -m 5 https://api.site.com/users",
+);
 ```
 
 ### Python
@@ -165,16 +167,16 @@ Transform returned response data with composable pipe stages. Stages never mutat
 - **JS:** Uses `.pipe(stage)`
 - **Python:** Uses the real `|` operator
 
-| Stage | Behavior |
-|---|---|
-| `grep(match)` | Keep items matching a string, object attributes, or predicate function |
-| `head(n)` / `tail(n)` | Keep first or last N elements |
-| `sort([key])` | Order items alphabetically or by property |
-| `uniq([key])` | Drop duplicate records |
-| `cut(...keys)` | Project only listed object properties |
-| `wc()` | Count items, lines, or keys |
-| `tee(fn)` | Tap side effect (logging, debug) without altering data |
-| `xargs(fn)` | Map concurrent child requests for each item |
+| Stage                 | Behavior                                                               |
+| --------------------- | ---------------------------------------------------------------------- |
+| `grep(match)`         | Keep items matching a string, object attributes, or predicate function |
+| `head(n)` / `tail(n)` | Keep first or last N elements                                          |
+| `sort([key])`         | Order items alphabetically or by property                              |
+| `uniq([key])`         | Drop duplicate records                                                 |
+| `cut(...keys)`        | Project only listed object properties                                  |
+| `wc()`                | Count items, lines, or keys                                            |
+| `tee(fn)`             | Tap side effect (logging, debug) without altering data                 |
+| `xargs(fn)`           | Map concurrent child requests for each item                            |
 
 ```js
 // JavaScript
@@ -240,6 +242,7 @@ api.untrap(h)
 ## Error Model
 
 Requests resolving outside 200–299 reject with a typed `UsrError` carrying:
+
 - `code`: Stable Axios-style error code (`ERR_BAD_REQUEST`, `ERR_BAD_RESPONSE`, `ERR_NETWORK`, `ETIMEDOUT`, `ERR_INVALID_URL`)
 - `status`: HTTP response status code
 - `response` / `request`: Axios-compatible payload details

@@ -54,7 +54,7 @@ describe("cross-language parity (JS)", () => {
   it("pipe error on non-array", () => {
     assert.throws(
       () => usr.pipeable("not-an-array").pipe(usr.wc()),
-      (err) => err instanceof usr.UsrError && err.code === "ERR_BAD_PIPE"
+      (err) => err instanceof usr.UsrError && err.code === "ERR_BAD_PIPE",
     );
   });
 });

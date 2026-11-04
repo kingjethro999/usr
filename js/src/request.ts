@@ -17,8 +17,15 @@ const METHOD_BY_COMMAND: Record<MethodLike, string> = {
 };
 
 export function createDispatcher(baseConfig: UsrConfig, method: MethodLike) {
-  return async (url: string, data?: unknown, options?: UsrConfig): Promise<UsrResponse> => {
-    const config = mergeConfig(baseConfig, options ?? {}) as UsrConfig & { url: string; method: string };
+  return async (
+    url: string,
+    data?: unknown,
+    options?: UsrConfig,
+  ): Promise<UsrResponse> => {
+    const config = mergeConfig(baseConfig, options ?? {}) as UsrConfig & {
+      url: string;
+      method: string;
+    };
     config.url = url;
     config.method = METHOD_BY_COMMAND[method];
     if (data !== undefined && !NO_BODY_METHODS.has(method)) {

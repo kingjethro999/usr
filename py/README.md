@@ -33,16 +33,16 @@ rm("https://api.site.com/users/42")
 
 ## Commands Reference
 
-| Command | HTTP Verb | Description | Body? |
-|---|---|---|---|
-| `cat` | GET | Read a remote resource | no |
-| `touch` | POST | Create or submit | yes |
-| `mv` | PUT | Replace or move | yes |
-| `sed` | PATCH | Edit in place | yes |
-| `rm` | DELETE | Remove remote resource | no |
-| `stat` | HEAD | Metadata only (headers) | no |
-| `man` | OPTIONS | Query capabilities | no |
-| `request` | CUSTOM | Generic Axios config escape hatch | config |
+| Command   | HTTP Verb | Description                       | Body?  |
+| --------- | --------- | --------------------------------- | ------ |
+| `cat`     | GET       | Read a remote resource            | no     |
+| `touch`   | POST      | Create or submit                  | yes    |
+| `mv`      | PUT       | Replace or move                   | yes    |
+| `sed`     | PATCH     | Edit in place                     | yes    |
+| `rm`      | DELETE    | Remove remote resource            | no     |
+| `stat`    | HEAD      | Metadata only (headers)           | no     |
+| `man`     | OPTIONS   | Query capabilities                | no     |
+| `request` | CUSTOM    | Generic Axios config escape hatch | config |
 
 ## Flags
 

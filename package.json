@@ -1,0 +1,21 @@
+{
+  "name": "unixsr-monorepo",
+  "version": "0.0.4",
+  "private": true,
+  "description": "UNIXSR: Unix Style Request — Axios with a Unix vocabulary HTTP client",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run lint:js && npm run lint:web",
+    "lint:js": "npm run lint --prefix js",
+    "lint:web": "pnpm --prefix web lint",
+    "typecheck": "npm run typecheck --prefix js && (cd py && mypy unixsr usr)",
+    "test": "node --test test/version.test.js && npm test --prefix js && (cd py && python3 -m unittest -v test_usr.py test_parity.py)",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test",
+    "build": "npm run build --prefix js && pnpm --prefix web build && (cd py && python3 -m build)"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0"
+  }
+}

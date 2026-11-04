@@ -30,7 +30,7 @@ export function syncVersion() {
     fs.writeFileSync(
       path.join(rootDir, "web", "version.json"),
       JSON.stringify(versionInfo, null, 2) + "\n",
-      "utf8"
+      "utf8",
     );
   }
 
@@ -45,6 +45,21 @@ export function syncVersion() {
 
   // 4. Root VERSION file (matching zyrk pattern: vX.Y.Z)
   fs.writeFileSync(path.join(rootDir, "VERSION"), `v${version}\n`, "utf8");
+
+  // 5. Root package.json & package-lock.json
+  const rootPkgPath = path.join(rootDir, "package.json");
+  if (fs.existsSync(rootPkgPath)) {
+    const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, "utf8"));
+    rootPkg.version = version;
+    fs.writeFileSync(rootPkgPath, JSON.stringify(rootPkg, null, 2) + "\n", "utf8");
+  }
+  const rootLockPath = path.join(rootDir, "package-lock.json");
+  if (fs.existsSync(rootLockPath)) {
+    const rootLock = JSON.parse(fs.readFileSync(rootLockPath, "utf8"));
+    rootLock.version = version;
+    if (rootLock.packages?.[""]) rootLock.packages[""].version = version;
+    fs.writeFileSync(rootLockPath, JSON.stringify(rootLock, null, 2) + "\n", "utf8");
+  }
 
   return versionInfo;
 }

@@ -70,12 +70,30 @@ export function Terminal() {
       output: JSON.stringify(
         [
           { id: 1, name: "Ada Lovelace", username: "ada", role: "admin", active: true },
-          { id: 2, name: "Alan Turing", username: "alan", role: "engineer", active: true },
-          { id: 3, name: "Grace Hopper", username: "grace", role: "admiral", active: false },
-          { id: 4, name: "Dennis Ritchie", username: "dmr", role: "creator", active: false },
+          {
+            id: 2,
+            name: "Alan Turing",
+            username: "alan",
+            role: "engineer",
+            active: true,
+          },
+          {
+            id: 3,
+            name: "Grace Hopper",
+            username: "grace",
+            role: "admiral",
+            active: false,
+          },
+          {
+            id: 4,
+            name: "Dennis Ritchie",
+            username: "dmr",
+            role: "creator",
+            active: false,
+          },
         ],
         null,
-        2
+        2,
       ),
     },
   ]);
@@ -264,7 +282,8 @@ export function Terminal() {
         {
           id: Math.random().toString(),
           command: line,
-          output: "usr: sudo: USR needs no elevated privileges. All operations are standard HTTP.",
+          output:
+            "usr: sudo: USR needs no elevated privileges. All operations are standard HTTP.",
         },
       ]);
       return;
@@ -276,7 +295,8 @@ export function Terminal() {
         {
           id: Math.random().toString(),
           command: line,
-          output: "usr: rm: USR deletes remote HTTP resources only and never touches your local filesystem.",
+          output:
+            "usr: rm: USR deletes remote HTTP resources only and never touches your local filesystem.",
         },
       ]);
       return;
@@ -377,7 +397,9 @@ export function Terminal() {
             const key = arg0;
             const arr = [...(outputData as Record<string, unknown>[])];
             if (key) {
-              arr.sort((a, b) => String(a[key] ?? "").localeCompare(String(b[key] ?? "")));
+              arr.sort((a, b) =>
+                String(a[key] ?? "").localeCompare(String(b[key] ?? "")),
+              );
             } else {
               arr.sort();
             }
@@ -444,7 +466,8 @@ export function Terminal() {
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (commandHistory.length === 0) return;
-      const nextIdx = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+      const nextIdx =
+        historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
       setHistoryIndex(nextIdx);
       setInput(commandHistory[nextIdx]);
     } else if (e.key === "ArrowDown") {
@@ -481,7 +504,7 @@ export function Terminal() {
       const lastToken = tokens[tokens.length - 1];
       if (lastToken) {
         const matches = AUTOCOMPLETE_LIST.filter((item) =>
-          item.toLowerCase().startsWith(lastToken.toLowerCase())
+          item.toLowerCase().startsWith(lastToken.toLowerCase()),
         );
         if (matches.length > 0) {
           e.preventDefault();
@@ -505,7 +528,9 @@ export function Terminal() {
             <div className="flex items-center gap-2">
               <span className="text-[var(--theme-fg)]">guest</span>
               <span className="text-[var(--theme-fg)]">@</span>
-              <span className="text-[var(--theme-green)] font-bold">{versionInfo.name}</span>
+              <span className="text-[var(--theme-green)] font-bold">
+                {versionInfo.name}
+              </span>
               <span className="text-[var(--theme-blue)]">:~</span>
               <span className="text-[var(--theme-fg)]">$</span>
               <span className="font-bold">{entry.command}</span>
@@ -517,8 +542,8 @@ export function Terminal() {
                   entry.statusLine.code >= 200 && entry.statusLine.code < 300
                     ? "text-[var(--theme-green)]"
                     : entry.statusLine.code >= 400 && entry.statusLine.code < 500
-                    ? "text-[var(--theme-yellow)]"
-                    : "text-[var(--theme-red)]"
+                      ? "text-[var(--theme-yellow)]"
+                      : "text-[var(--theme-red)]"
                 }`}
               >
                 {entry.statusLine.text}
@@ -542,7 +567,9 @@ export function Terminal() {
       <div className="mt-3 flex items-center gap-2">
         <span className="text-[var(--theme-fg)] select-none">guest</span>
         <span className="text-[var(--theme-fg)] select-none">@</span>
-        <span className="text-[var(--theme-green)] font-bold select-none">{versionInfo.name}</span>
+        <span className="text-[var(--theme-green)] font-bold select-none">
+          {versionInfo.name}
+        </span>
         <span className="text-[var(--theme-blue)] select-none">:~</span>
         <span className="text-[var(--theme-fg)] select-none">$</span>
         <input

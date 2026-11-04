@@ -1,8 +1,14 @@
 #!/bin/sh
 set -eu
 
+# Format what this commit touches so the tree stays format-clean.
+if [ -x node_modules/.bin/prettier ]; then
+  git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 -r ./node_modules/.bin/prettier --write --ignore-unknown --
+  git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 -r git add --
+fi
+
 # Every commit bumps the mechanical version across JS, Python, and Web.
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
   node scripts/bump-version.js
-  git add VERSION version.json js/package.json py/pyproject.toml web/version.json web/package.json
+  git add VERSION version.json js/package.json py/pyproject.toml web/version.json web/package.json package.json package-lock.json
 fi

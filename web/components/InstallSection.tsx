@@ -76,7 +76,9 @@ export function InstallSection({ packageName }: InstallSectionProps) {
           </div>
 
           <div className="space-y-1 pt-1 text-[11px]">
-            <span className="text-[var(--theme-dim)] text-[10px]">Alternative package managers:</span>
+            <span className="text-[var(--theme-dim)] text-[10px]">
+              Alternative package managers:
+            </span>
             <div className="flex items-center justify-between text-[var(--theme-fg)]">
               <code>pnpm add {packageName}</code>
               <button
@@ -145,14 +147,18 @@ export function InstallSection({ packageName }: InstallSectionProps) {
                 onClick={() => copy(venvCmdUnix, "venv-unix")}
                 className="p-2 border border-[var(--theme-dim)] bg-[var(--theme-dim)]/5 cursor-pointer hover:border-[var(--theme-green)] transition-colors select-all leading-relaxed"
               >
-                <div className="text-[var(--theme-dim)]"># Create and activate virtual environment</div>
+                <div className="text-[var(--theme-dim)]">
+                  # Create and activate virtual environment
+                </div>
                 <div className="text-[var(--theme-fg)]">python3 -m venv .venv</div>
                 <div className="text-[var(--theme-fg)]">source .venv/bin/activate</div>
                 <div className="text-[var(--theme-green)]">pip install {packageName}</div>
               </div>
 
               <div className="flex items-center justify-between pt-1">
-                <span className="text-[var(--theme-dim)] text-[10px]">Windows PowerShell / CMD:</span>
+                <span className="text-[var(--theme-dim)] text-[10px]">
+                  Windows PowerShell / CMD:
+                </span>
                 <button
                   onClick={() => copy(venvCmdWin, "venv-win")}
                   className="text-[10px] text-[var(--theme-dim)] hover:text-[var(--theme-fg)] hover:underline cursor-pointer"
@@ -164,13 +170,18 @@ export function InstallSection({ packageName }: InstallSectionProps) {
                 onClick={() => copy(venvCmdWin, "venv-win")}
                 className="p-1.5 border border-[var(--theme-dim)] bg-[var(--theme-dim)]/5 cursor-pointer hover:border-[var(--theme-green)] transition-colors text-[11px] select-all"
               >
-                <code>python -m venv .venv &amp;&amp; .venv\Scripts\activate &amp;&amp; pip install {packageName}</code>
+                <code>
+                  python -m venv .venv &amp;&amp; .venv\Scripts\activate &amp;&amp; pip
+                  install {packageName}
+                </code>
               </div>
             </div>
           ) : (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[var(--theme-dim)] text-[10px]">Global / active environment:</span>
+                <span className="text-[var(--theme-dim)] text-[10px]">
+                  Global / active environment:
+                </span>
                 <button
                   onClick={() => copy(pipDirectCmd, "pip-direct")}
                   className="text-[11px] text-[var(--theme-cyan)] hover:underline cursor-pointer font-bold px-1"
@@ -185,7 +196,8 @@ export function InstallSection({ packageName }: InstallSectionProps) {
                 <code className="text-[var(--theme-green)] block">$ {pipDirectCmd}</code>
               </div>
               <p className="text-[10px] text-[var(--theme-dim)]">
-                Tip: PEP 668 environments (Debian/Ubuntu/macOS Homebrew) require a virtualenv to avoid modifying system packages.
+                Tip: PEP 668 environments (Debian/Ubuntu/macOS Homebrew) require a
+                virtualenv to avoid modifying system packages.
               </p>
             </div>
           )}

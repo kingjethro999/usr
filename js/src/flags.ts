@@ -25,14 +25,22 @@ function* tokenize(input: string): Generator<string> {
   const n = input.length;
   while (i < n) {
     const ch = input[i];
-    if (/\s/.test(ch)) { i++; continue; }
+    if (/\s/.test(ch)) {
+      i++;
+      continue;
+    }
     if (ch === "'" || ch === '"') {
       const quote = ch;
       i++;
       let buf = "";
       while (i < n && input[i] !== quote) {
-        if (input[i] === "\\" && i + 1 < n) { buf += input[i + 1]; i += 2; continue; }
-        buf += input[i]; i++;
+        if (input[i] === "\\" && i + 1 < n) {
+          buf += input[i + 1];
+          i += 2;
+          continue;
+        }
+        buf += input[i];
+        i++;
       }
       if (i < n) i++; // skip closing quote
       yield buf;
@@ -41,16 +49,26 @@ function* tokenize(input: string): Generator<string> {
     if (ch === "\\") {
       let buf = "";
       while (i < n && !/\s/.test(input[i]) && input[i] !== "'" && input[i] !== '"') {
-        if (input[i] === "\\" && i + 1 < n) { buf += input[i + 1]; i += 2; continue; }
-        buf += input[i]; i++;
+        if (input[i] === "\\" && i + 1 < n) {
+          buf += input[i + 1];
+          i += 2;
+          continue;
+        }
+        buf += input[i];
+        i++;
       }
       yield buf;
       continue;
     }
     let buf = "";
     while (i < n && !/\s/.test(input[i]) && input[i] !== "'" && input[i] !== '"') {
-      if (input[i] === "\\" && i + 1 < n) { buf += input[i + 1]; i += 2; continue; }
-      buf += input[i]; i++;
+      if (input[i] === "\\" && i + 1 < n) {
+        buf += input[i + 1];
+        i += 2;
+        continue;
+      }
+      buf += input[i];
+      i++;
     }
     yield buf;
   }
@@ -73,25 +91,55 @@ export function parseFlagString(input: string): Record<string, unknown> {
     const tok = tokens[i];
     const mapped = FLAG_MAP[tok];
     if (!mapped) {
-      if (!url) { url = tok; continue; }
+      if (!url) {
+        url = tok;
+        continue;
+      }
       throw new Error(`Unexpected token: ${tok}`);
     }
-    if (mapped === "ok") { flags.validateStatus = () => true; continue; }
-    if (mapped === "silent") { flags.silent = true; continue; }
-    if (mapped === "verbose") { flags.verbose = true; continue; }
-    if (mapped === "location") { flags.redirect = "follow"; continue; }
+    if (mapped === "ok") {
+      flags.validateStatus = () => true;
+      continue;
+    }
+    if (mapped === "silent") {
+      flags.silent = true;
+      continue;
+    }
+    if (mapped === "verbose") {
+      flags.verbose = true;
+      continue;
+    }
+    if (mapped === "location") {
+      flags.redirect = "follow";
+      continue;
+    }
     if (i + 1 >= tokens.length) throw new Error(`Missing value for flag ${tok}`);
     const val = tokens[++i];
-    if (mapped === "header") { headers.push(val); continue; }
-    if (mapped === "query") { queries.push(val); continue; }
+    if (mapped === "header") {
+      headers.push(val);
+      continue;
+    }
+    if (mapped === "query") {
+      queries.push(val);
+      continue;
+    }
     if (mapped === "user") {
       const [user, pass] = val.split(":");
       flags.auth = { username: user, password: pass ?? "" };
       continue;
     }
-    if (mapped === "max-time") { flags.timeout = Number(val); continue; }
-    if (mapped === "data") { flags.data = val; continue; }
-    if (mapped === "output") { flags.output = val; continue; }
+    if (mapped === "max-time") {
+      flags.timeout = Number(val);
+      continue;
+    }
+    if (mapped === "data") {
+      flags.data = val;
+      continue;
+    }
+    if (mapped === "output") {
+      flags.output = val;
+      continue;
+    }
   }
 
   if (headers.length) {

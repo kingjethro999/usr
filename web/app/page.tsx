@@ -78,11 +78,16 @@ export default function Home() {
               {commands.map((c) => (
                 <tr key={c.cmd} className="hover:bg-[var(--theme-dim)]/10">
                   <td className="py-2 pr-4 font-bold text-[var(--theme-green)]">
-                    <Link href={`/man/${c.cmd}`} className="underline text-[var(--theme-blue)]">
+                    <Link
+                      href={`/man/${c.cmd}`}
+                      className="underline text-[var(--theme-blue)]"
+                    >
                       {c.cmd}
                     </Link>
                   </td>
-                  <td className="py-2 pr-4 font-bold text-[var(--theme-yellow)]">{c.http}</td>
+                  <td className="py-2 pr-4 font-bold text-[var(--theme-yellow)]">
+                    {c.http}
+                  </td>
                   <td className="py-2 pr-4 text-[var(--theme-fg)]">{c.mnemonic}</td>
                   <td className="py-2 text-[var(--theme-dim)]">{c.body}</td>
                 </tr>
@@ -107,9 +112,7 @@ export default function Home() {
           <div className="text-[var(--theme-red)]">
             - const res = await fetch(&quot;https://api.site.com/users&quot;);
           </div>
-          <div className="text-[var(--theme-red)]">
-            - const users = await res.json();
-          </div>
+          <div className="text-[var(--theme-red)]">- const users = await res.json();</div>
           <div className="text-[var(--theme-green)]">
             + import * as usr from &quot;usr&quot;;
           </div>
@@ -131,7 +134,9 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="border border-[var(--theme-dim)] p-3 space-y-2">
-            <span className="text-[var(--theme-dim)] text-[10px] uppercase">JavaScript</span>
+            <span className="text-[var(--theme-dim)] text-[10px] uppercase">
+              JavaScript
+            </span>
             <pre className="overflow-x-auto text-[var(--theme-fg)] leading-relaxed">{`const names = await usr
   .cat("https://api.site.com/users")
   .pipe(usr.grep({ active: true }))

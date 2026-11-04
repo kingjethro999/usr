@@ -61,34 +61,46 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
     },
     options: [
       { flag: "-H, --header <k:v>", desc: "Add a custom request header (repeatable)." },
-      { flag: "-m, --max-time <sec>", desc: "Request timeout in seconds (default none)." },
+      {
+        flag: "-m, --max-time <sec>",
+        desc: "Request timeout in seconds (default none).",
+      },
       { flag: "-q, --query <k=v>", desc: "Append a URL query parameter (repeatable)." },
       { flag: "-u, --user <u:p>", desc: "HTTP Basic authentication, username:password." },
       { flag: "-L, --location", desc: "Follow HTTP 3xx redirects." },
       { flag: "-o, --output <file>", desc: "Stream response body to a local file." },
-      { flag: "--ok", desc: "Accept any status code (200-599) without throwing UsrError." },
+      {
+        flag: "--ok",
+        desc: "Accept any status code (200-599) without throwing UsrError.",
+      },
     ],
     examples: [
       {
         title: "Basic GET request",
         js: '// Named import\nimport { cat } from "usr";\n\nconst res = await cat("https://api.site.com/users");\nconsole.log(res.status, res.data);',
-        python: '# Star import\nfrom usr import *\n\nres = cat("https://api.site.com/users")\nprint(res.status, res.data)',
+        python:
+          '# Star import\nfrom usr import *\n\nres = cat("https://api.site.com/users")\nprint(res.status, res.data)',
       },
       {
         title: "Structured flags and query params",
         js: 'import * as usr from "usr";\n\nconst res = await usr.cat("https://api.site.com/users", {\n  "-H": "Accept: application/json",\n  "-q": "role=engineer",\n  "-m": 10\n});',
-        python: 'import usr\n\nres = usr.cat(\n    "https://api.site.com/users",\n    H="Accept: application/json",\n    q="role=engineer",\n    m=10\n)',
+        python:
+          'import usr\n\nres = usr.cat(\n    "https://api.site.com/users",\n    H="Accept: application/json",\n    q="role=engineer",\n    m=10\n)',
       },
       {
         title: "Unix command-line string invocation",
         js: 'import { cat } from "usr";\n\nconst res = await cat("-H \'Authorization: Bearer SECRET\' -m 5 https://api.site.com/me");',
-        python: 'from usr import cat\n\nres = cat("-H \'Authorization: Bearer SECRET\' -m 5 https://api.site.com/me")',
+        python:
+          "from usr import cat\n\nres = cat(\"-H 'Authorization: Bearer SECRET' -m 5 https://api.site.com/me\")",
       },
     ],
     errors: [
       { code: "ERR_BAD_REQUEST", desc: "HTTP 4xx response code from remote server." },
       { code: "ERR_BAD_RESPONSE", desc: "HTTP 5xx server failure returned." },
-      { code: "ERR_NETWORK", desc: "TCP connection failure, DNS resolution error, or refused." },
+      {
+        code: "ERR_NETWORK",
+        desc: "TCP connection failure, DNS resolution error, or refused.",
+      },
       { code: "ETIMEDOUT", desc: "Request exceeded -m / --max-time timeout threshold." },
       { code: "ERR_INVALID_URL", desc: "Malformed URL or unsupported protocol scheme." },
     ],
@@ -120,7 +132,10 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
     },
     options: [
       { flag: "-d, --data <json|body>", desc: "Request payload to transmit." },
-      { flag: "-H, --header <k:v>", desc: "Add request header (e.g. Content-Type, Authorization)." },
+      {
+        flag: "-H, --header <k:v>",
+        desc: "Add request header (e.g. Content-Type, Authorization).",
+      },
       { flag: "-u, --user <u:p>", desc: "HTTP Basic auth username:password." },
       { flag: "--ok", desc: "Do not throw on 4xx/5xx responses." },
     ],
@@ -128,11 +143,15 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Create a resource with JSON payload",
         js: 'import { touch } from "usr";\n\nconst res = await touch("https://api.site.com/users", {\n  name: "Grace Hopper",\n  role: "pioneer"\n});\nconsole.log("Created ID:", res.data.id);',
-        python: 'from usr import touch\n\nres = touch("https://api.site.com/users", {\n    "name": "Grace Hopper",\n    "role": "pioneer"\n})\nprint("Created ID:", res.data.get("id"))',
+        python:
+          'from usr import touch\n\nres = touch("https://api.site.com/users", {\n    "name": "Grace Hopper",\n    "role": "pioneer"\n})\nprint("Created ID:", res.data.get("id"))',
       },
     ],
     errors: [
-      { code: "ERR_BAD_REQUEST", desc: "4xx status code (e.g. 400 validation error, 409 conflict)." },
+      {
+        code: "ERR_BAD_REQUEST",
+        desc: "4xx status code (e.g. 400 validation error, 409 conflict).",
+      },
       { code: "ERR_NETWORK", desc: "Connection failed before server responded." },
     ],
     seeAlso: ["cat", "mv", "sed", "rm"],
@@ -170,12 +189,11 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Full document replacement",
         js: 'import { mv } from "usr";\n\nawait mv("https://api.site.com/users/42", {\n  name: "Alan Turing",\n  active: true\n});',
-        python: 'from usr import mv\n\nmv("https://api.site.com/users/42", {\n    "name": "Alan Turing",\n    "active": True\n})',
+        python:
+          'from usr import mv\n\nmv("https://api.site.com/users/42", {\n    "name": "Alan Turing",\n    "active": True\n})',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_REQUEST", desc: "404 not found or 400 invalid schema." },
-    ],
+    errors: [{ code: "ERR_BAD_REQUEST", desc: "404 not found or 400 invalid schema." }],
     seeAlso: ["sed", "touch", "rm"],
   },
   sed: {
@@ -210,11 +228,15 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Partial status update",
         js: 'import { sed } from "usr";\n\nawait sed("https://api.site.com/users/42", { active: false });',
-        python: 'from usr import sed\n\nsed("https://api.site.com/users/42", {"active": False})',
+        python:
+          'from usr import sed\n\nsed("https://api.site.com/users/42", {"active": False})',
       },
     ],
     errors: [
-      { code: "ERR_BAD_REQUEST", desc: "Server rejected patch instruction or invalid attribute." },
+      {
+        code: "ERR_BAD_REQUEST",
+        desc: "Server rejected patch instruction or invalid attribute.",
+      },
     ],
     seeAlso: ["mv", "touch", "cat"],
   },
@@ -253,9 +275,7 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
         python: 'from usr import rm\n\nrm("https://api.site.com/users/42")',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_REQUEST", desc: "404 Not Found or 403 Forbidden." },
-    ],
+    errors: [{ code: "ERR_BAD_REQUEST", desc: "404 Not Found or 403 Forbidden." }],
     seeAlso: ["cat", "touch"],
   },
   stat: {
@@ -290,12 +310,11 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Inspect content-length before download",
         js: 'import { stat } from "usr";\n\nconst res = await stat("https://api.site.com/large-archive.tar.gz");\nconsole.log("Size:", res.headers["content-length"]);',
-        python: 'from usr import stat\n\nres = stat("https://api.site.com/large-archive.tar.gz")\nprint("Size:", res.headers.get("content-length"))',
+        python:
+          'from usr import stat\n\nres = stat("https://api.site.com/large-archive.tar.gz")\nprint("Size:", res.headers.get("content-length"))',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_REQUEST", desc: "Resource not found or bad gateway." },
-    ],
+    errors: [{ code: "ERR_BAD_REQUEST", desc: "Resource not found or bad gateway." }],
     seeAlso: ["cat", "man"],
   },
   man: {
@@ -322,19 +341,16 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
         'from usr import man\nres = man("https://api.site.com/users")',
       ],
     },
-    options: [
-      { flag: "-H, --header <k:v>", desc: "Request headers." },
-    ],
+    options: [{ flag: "-H, --header <k:v>", desc: "Request headers." }],
     examples: [
       {
         title: "Discover allowed verbs",
         js: 'import { man } from "usr";\n\nconst res = await man("https://api.site.com/users");\nconsole.log("Allow:", res.headers["allow"]);',
-        python: 'from usr import man\n\nres = man("https://api.site.com/users")\nprint("Allow:", res.headers.get("allow"))',
+        python:
+          'from usr import man\n\nres = man("https://api.site.com/users")\nprint("Allow:", res.headers.get("allow"))',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_REQUEST", desc: "Endpoint rejected OPTIONS." },
-    ],
+    errors: [{ code: "ERR_BAD_REQUEST", desc: "Endpoint rejected OPTIONS." }],
     seeAlso: ["cat", "stat"],
   },
   request: {
@@ -371,12 +387,11 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Custom HTTP method",
         js: 'import { request } from "usr";\n\nconst res = await request({\n  method: "PURGE",\n  url: "https://api.site.com/cache/catalog"\n});',
-        python: 'from usr import request\n\nres = request({\n    "method": "PURGE",\n    "url": "https://api.site.com/cache/catalog"\n})',
+        python:
+          'from usr import request\n\nres = request({\n    "method": "PURGE",\n    "url": "https://api.site.com/cache/catalog"\n})',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_REQUEST", desc: "Server returned error status." },
-    ],
+    errors: [{ code: "ERR_BAD_REQUEST", desc: "Server returned error status." }],
     seeAlso: ["cat", "touch", "cd"],
   },
   cd: {
@@ -412,12 +427,11 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Scoped client with Authorization header",
         js: 'import { cd } from "usr";\n\nconst api = cd("https://api.site.com", {\n  "-H": "Authorization: Bearer SECRET_TOKEN"\n});\n\nconst users = await api.cat("/users");\nconst me = await api.cat("/me");',
-        python: 'from usr import cd\n\napi = cd("https://api.site.com", H="Authorization: Bearer SECRET_TOKEN")\nusers = api.cat("/users")\nme = api.cat("/me")',
+        python:
+          'from usr import cd\n\napi = cd("https://api.site.com", H="Authorization: Bearer SECRET_TOKEN")\nusers = api.cat("/users")\nme = api.cat("/me")',
       },
     ],
-    errors: [
-      { code: "ERR_INVALID_URL", desc: "Base URL is invalid." },
-    ],
+    errors: [{ code: "ERR_INVALID_URL", desc: "Base URL is invalid." }],
     seeAlso: ["cat", "trap", "untrap"],
   },
   trap: {
@@ -452,11 +466,15 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Logging and auth injection trap",
         js: 'import { trap } from "usr";\n\nconst h = trap("request", (config) => {\n  console.log(`[REQ] ${config.method} ${config.url}`);\n  config.headers = config.headers || {};\n  config.headers["X-Trace-Id"] = "trace-123";\n  return config;\n});',
-        python: 'from usr import trap\n\ndef log_req(cfg):\n    print(f"[REQ] {cfg.get(\'method\')} {cfg.get(\'url\')}")\n    return cfg\n\nh = trap("request", log_req)',
+        python:
+          "from usr import trap\n\ndef log_req(cfg):\n    print(f\"[REQ] {cfg.get('method')} {cfg.get('url')}\")\n    return cfg\n\nh = trap(\"request\", log_req)",
       },
     ],
     errors: [
-      { code: "ERR_BAD_ARG", desc: "Invalid phase specified (must be 'request' or 'response')." },
+      {
+        code: "ERR_BAD_ARG",
+        desc: "Invalid phase specified (must be 'request' or 'response').",
+      },
     ],
     seeAlso: ["untrap", "cd"],
   },
@@ -472,22 +490,20 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       js: "untrap(handle: Handle): void",
       python: "untrap(handle: Handle) -> None",
     },
-    description:
-      "untrap unregisters and removes a previously attached trap handle.",
+    description: "untrap unregisters and removes a previously attached trap handle.",
     imports: {
       js: [
         'import { trap, untrap } from "usr";\nconst h = trap("request", fn);\nuntrap(h);',
       ],
-      python: [
-        'from usr import trap, untrap\nh = trap("request", fn)\nuntrap(h)',
-      ],
+      python: ['from usr import trap, untrap\nh = trap("request", fn)\nuntrap(h)'],
     },
     options: [],
     examples: [
       {
         title: "Ejecting a temporary trap",
         js: 'import { trap, untrap } from "usr";\n\nconst handle = trap("response", (res) => {\n  console.log("Status:", res.status);\n  return res;\n});\n\n// Later, remove the trap:\nuntrap(handle);',
-        python: 'from usr import trap, untrap\n\nhandle = trap("response", lambda r: r)\nuntrap(handle)',
+        python:
+          'from usr import trap, untrap\n\nhandle = trap("response", lambda r: r)\nuntrap(handle)',
       },
     ],
     errors: [],
@@ -511,26 +527,24 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       js: [
         'import { cat, grep } from "usr";\nawait cat("/users").pipe(grep({ active: true }));',
       ],
-      python: [
-        'from usr import cat, grep\ncat("/users") | grep(active=True)',
-      ],
+      python: ['from usr import cat, grep\ncat("/users") | grep(active=True)'],
     },
     options: [],
     examples: [
       {
         title: "Field equality match",
         js: 'import { cat, grep } from "usr";\n\nconst active = await cat("https://api.site.com/users")\n  .pipe(grep({ active: true }));',
-        python: 'from usr import cat, grep\n\nactive = cat("https://api.site.com/users") | grep(active=True)',
+        python:
+          'from usr import cat, grep\n\nactive = cat("https://api.site.com/users") | grep(active=True)',
       },
       {
         title: "Substring text search across all attributes",
         js: 'import { cat, grep } from "usr";\n\nconst engineers = await cat("https://api.site.com/users")\n  .pipe(grep("engineer"));',
-        python: 'from usr import cat, grep\n\nengineers = cat("https://api.site.com/users") | grep("engineer")',
+        python:
+          'from usr import cat, grep\n\nengineers = cat("https://api.site.com/users") | grep("engineer")',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["head", "cut", "sort"],
   },
   head: {
@@ -548,24 +562,19 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
     description:
       "head takes the first N elements of an array. Note: HTTP HEAD is named 'stat' in USR to prevent naming collisions.",
     imports: {
-      js: [
-        'import { cat, head } from "usr";\nawait cat("/users").pipe(head(5));',
-      ],
-      python: [
-        'from usr import cat, head\ncat("/users") | head(5)',
-      ],
+      js: ['import { cat, head } from "usr";\nawait cat("/users").pipe(head(5));'],
+      python: ['from usr import cat, head\ncat("/users") | head(5)'],
     },
     options: [],
     examples: [
       {
         title: "Take top 5 items",
         js: 'import { cat, head } from "usr";\n\nconst top5 = await cat("https://api.site.com/users")\n  .pipe(head(5));',
-        python: 'from usr import cat, head\n\ntop5 = cat("https://api.site.com/users") | head(5)',
+        python:
+          'from usr import cat, head\n\ntop5 = cat("https://api.site.com/users") | head(5)',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["tail", "grep", "wc"],
   },
   tail: {
@@ -580,27 +589,21 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       js: "tail(n: number = 10): PipeStage",
       python: "tail(n: int = 10) -> PipeStage",
     },
-    description:
-      "tail extracts the final N elements from an array of records.",
+    description: "tail extracts the final N elements from an array of records.",
     imports: {
-      js: [
-        'import { cat, tail } from "usr";\nawait cat("/logs").pipe(tail(10));',
-      ],
-      python: [
-        'from usr import cat, tail\ncat("/logs") | tail(10)',
-      ],
+      js: ['import { cat, tail } from "usr";\nawait cat("/logs").pipe(tail(10));'],
+      python: ['from usr import cat, tail\ncat("/logs") | tail(10)'],
     },
     options: [],
     examples: [
       {
         title: "Latest 10 log entries",
         js: 'import { cat, tail } from "usr";\n\nconst recent = await cat("https://api.site.com/logs")\n  .pipe(tail(10));',
-        python: 'from usr import cat, tail\n\nrecent = cat("https://api.site.com/logs") | tail(10)',
+        python:
+          'from usr import cat, tail\n\nrecent = cat("https://api.site.com/logs") | tail(10)',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["head", "grep", "wc"],
   },
   cut: {
@@ -621,21 +624,18 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       js: [
         'import { cat, cut } from "usr";\nawait cat("/users").pipe(cut("id", "email"));',
       ],
-      python: [
-        'from usr import cat, cut\ncat("/users") | cut("id", "email")',
-      ],
+      python: ['from usr import cat, cut\ncat("/users") | cut("id", "email")'],
     },
     options: [],
     examples: [
       {
         title: "Select specific fields",
         js: 'import { cat, cut } from "usr";\n\nconst directory = await cat("https://api.site.com/users")\n  .pipe(cut("id", "name", "email"));',
-        python: 'from usr import cat, cut\n\ndirectory = cat("https://api.site.com/users") | cut("id", "name", "email")',
+        python:
+          'from usr import cat, cut\n\ndirectory = cat("https://api.site.com/users") | cut("id", "name", "email")',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array of objects." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array of objects." }],
     seeAlso: ["grep", "sort", "uniq"],
   },
   sort: {
@@ -653,24 +653,19 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
     description:
       "sort orders an array of primitive values or objects by a specified property key or comparison function.",
     imports: {
-      js: [
-        'import { cat, sort } from "usr";\nawait cat("/users").pipe(sort("name"));',
-      ],
-      python: [
-        'from usr import cat, sort\ncat("/users") | sort("name")',
-      ],
+      js: ['import { cat, sort } from "usr";\nawait cat("/users").pipe(sort("name"));'],
+      python: ['from usr import cat, sort\ncat("/users") | sort("name")'],
     },
     options: [],
     examples: [
       {
         title: "Sort alphabetically by name",
         js: 'import { cat, sort } from "usr";\n\nconst alphabetical = await cat("https://api.site.com/users")\n  .pipe(sort("name"));',
-        python: 'from usr import cat, sort\n\nalphabetical = cat("https://api.site.com/users") | sort("name")',
+        python:
+          'from usr import cat, sort\n\nalphabetical = cat("https://api.site.com/users") | sort("name")',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["uniq", "grep", "head"],
   },
   uniq: {
@@ -688,24 +683,19 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
     description:
       "uniq eliminates duplicate elements from an array, optionally comparing by a specified property key.",
     imports: {
-      js: [
-        'import { cat, uniq } from "usr";\nawait cat("/tags").pipe(uniq());',
-      ],
-      python: [
-        'from usr import cat, uniq\ncat("/tags") | uniq()',
-      ],
+      js: ['import { cat, uniq } from "usr";\nawait cat("/tags").pipe(uniq());'],
+      python: ['from usr import cat, uniq\ncat("/tags") | uniq()'],
     },
     options: [],
     examples: [
       {
         title: "Deduplicate unique roles",
         js: 'import { cat, cut, uniq } from "usr";\n\nconst roles = await cat("https://api.site.com/users")\n  .pipe(cut("role"))\n  .pipe(uniq("role"));',
-        python: 'from usr import cat, cut, uniq\n\nroles = cat("https://api.site.com/users") | cut("role") | uniq("role")',
+        python:
+          'from usr import cat, cut, uniq\n\nroles = cat("https://api.site.com/users") | cut("role") | uniq("role")',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["sort", "grep", "wc"],
   },
   wc: {
@@ -735,7 +725,8 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Count matching active users",
         js: 'import { cat, grep, wc } from "usr";\n\nconst count = await cat("https://api.site.com/users")\n  .pipe(grep({ active: true }))\n  .pipe(wc());\nconsole.log("Total active users:", count);',
-        python: 'from usr import cat, grep, wc\n\ncount = cat("https://api.site.com/users") | grep(active=True) | wc()\nprint("Total active users:", count)',
+        python:
+          'from usr import cat, grep, wc\n\ncount = cat("https://api.site.com/users") | grep(active=True) | wc()\nprint("Total active users:", count)',
       },
     ],
     errors: [],
@@ -759,16 +750,15 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       js: [
         'import { cat, tee } from "usr";\nawait cat("/users").pipe(tee(data => console.log(data)));',
       ],
-      python: [
-        'from usr import cat, tee\ncat("/users") | tee(lambda d: print(d))',
-      ],
+      python: ['from usr import cat, tee\ncat("/users") | tee(lambda d: print(d))'],
     },
     options: [],
     examples: [
       {
         title: "Debugging intermediary pipe step",
         js: 'import { cat, grep, tee, head } from "usr";\n\nconst res = await cat("https://api.site.com/users")\n  .pipe(grep({ active: true }))\n  .pipe(tee((items) => console.log("Filtered count:", items.length)))\n  .pipe(head(3));',
-        python: 'from usr import cat, grep, tee, head\n\nres = (\n    cat("https://api.site.com/users")\n    | grep(active=True)\n    | tee(lambda items: print("Filtered count:", len(items)))\n    | head(3)\n)',
+        python:
+          'from usr import cat, grep, tee, head\n\nres = (\n    cat("https://api.site.com/users")\n    | grep(active=True)\n    | tee(lambda items: print("Filtered count:", len(items)))\n    | head(3)\n)',
       },
     ],
     errors: [],
@@ -801,12 +791,11 @@ export const MAN_COMMANDS: Record<string, ManCommand> = {
       {
         title: "Fan-out detail lookups for each parent item",
         js: 'import { cat, cut, head, xargs } from "usr";\n\nconst profiles = await cat("https://api.site.com/users")\n  .pipe(head(5))\n  .pipe(xargs(async (user) => {\n    const detail = await cat(`https://api.site.com/profiles/${user.id}`);\n    return detail.data;\n  }));',
-        python: 'from usr import cat, head, xargs\n\nprofiles = (\n    cat("https://api.site.com/users")\n    | head(5)\n    | xargs(lambda user: cat(f"https://api.site.com/profiles/{user[\'id\']}").data)\n)',
+        python:
+          'from usr import cat, head, xargs\n\nprofiles = (\n    cat("https://api.site.com/users")\n    | head(5)\n    | xargs(lambda user: cat(f"https://api.site.com/profiles/{user[\'id\']}").data)\n)',
       },
     ],
-    errors: [
-      { code: "ERR_BAD_PIPE", desc: "Input data is not an array." },
-    ],
+    errors: [{ code: "ERR_BAD_PIPE", desc: "Input data is not an array." }],
     seeAlso: ["tee", "grep"],
   },
 };

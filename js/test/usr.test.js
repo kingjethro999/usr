@@ -47,7 +47,9 @@ describe("commands map to HTTP methods", async (t) => {
 });
 
 describe("flags string form parses headers/query/timeout", () => {
-  const flags = usr.parseFlagString("-H 'X-Tok: abc' -m 5 -q a=1 -q b=2 https://api.site.com/x");
+  const flags = usr.parseFlagString(
+    "-H 'X-Tok: abc' -m 5 -q a=1 -q b=2 https://api.site.com/x",
+  );
   it("url", () => assert.strictEqual(flags.url, "https://api.site.com/x"));
   it("headers", () => assert.deepStrictEqual(flags.headers, { "X-Tok": "abc" }));
   it("timeout", () => assert.strictEqual(flags.timeout, 5));
@@ -56,7 +58,10 @@ describe("flags string form parses headers/query/timeout", () => {
 
 describe("pipes compose", () => {
   const p = usr
-    .pipeable([{ name: "Ada", active: true }, { name: "Bob", active: false }])
+    .pipeable([
+      { name: "Ada", active: true },
+      { name: "Bob", active: false },
+    ])
     .pipe(usr.grep({ active: true }))
     .pipe(usr.cut("name"))
     .pipe(usr.head(5));
@@ -70,7 +75,10 @@ describe("wc counts items", () => {
 
 describe("tee passes through and runs side effect", () => {
   let seen = null;
-  const p = usr.pipeable([1, 2]).pipe(usr.tee((d) => (seen = d))).pipe(usr.head(1));
+  const p = usr
+    .pipeable([1, 2])
+    .pipe(usr.tee((d) => (seen = d)))
+    .pipe(usr.head(1));
   it("passes through", () => assert.deepStrictEqual(p.data, [1]));
   it("side effect", () => assert.deepStrictEqual(seen, [1, 2]));
 });

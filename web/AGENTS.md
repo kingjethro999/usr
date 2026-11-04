@@ -33,18 +33,18 @@ The whole site uses the 16 ANSI colors plus a foreground, a background and a cur
 
 **Default dark theme (`night`)**
 
-| Token | Hex | Contrast on bg | Role |
-|---|---|---|---|
-| `bg` | `#14171C` | n/a | background |
-| `fg` | `#D5D8DE` | 12.58 | body text |
-| `dim` (bright black) | `#8791A0` | 5.64 | comments, secondary text, line numbers |
-| `red` | `#E5646E` | 5.46 | errors, 5xx, deletions |
-| `green` | `#86C46B` | 8.66 | success, 2xx, additions |
-| `yellow` | `#E3B341` | 9.23 | warnings, 4xx, numbers |
-| `blue` | `#6AA2EE` | 6.86 | links, paths |
-| `magenta` | `#C48DE8` | 7.12 | flags and options |
-| `cyan` | `#55C4BE` | 8.58 | strings, URLs, 1xx and 3xx |
-| `cursor` | `#FFB000` | 9.80 | the block cursor, focus ring, nothing else |
+| Token                | Hex       | Contrast on bg | Role                                       |
+| -------------------- | --------- | -------------- | ------------------------------------------ |
+| `bg`                 | `#14171C` | n/a            | background                                 |
+| `fg`                 | `#D5D8DE` | 12.58          | body text                                  |
+| `dim` (bright black) | `#8791A0` | 5.64           | comments, secondary text, line numbers     |
+| `red`                | `#E5646E` | 5.46           | errors, 5xx, deletions                     |
+| `green`              | `#86C46B` | 8.66           | success, 2xx, additions                    |
+| `yellow`             | `#E3B341` | 9.23           | warnings, 4xx, numbers                     |
+| `blue`               | `#6AA2EE` | 6.86           | links, paths                               |
+| `magenta`            | `#C48DE8` | 7.12           | flags and options                          |
+| `cyan`               | `#55C4BE` | 8.58           | strings, URLs, 1xx and 3xx                 |
+| `cursor`             | `#FFB000` | 9.80           | the block cursor, focus ring, nothing else |
 
 **Light theme (`paper`)**: `bg #FCFCFB`, `fg #1B1F24` (16.13), `dim #5A6270` (5.99), `red #B3261E` (6.37), `green #1F7A3D` (5.23), `yellow #8A5A00` (5.77), `blue #1F5FBF` (5.93), `magenta #8A3FB5` (5.91), `cyan #0B7A75` (5.04), `cursor #B26A00` (4.13, which is fine because the cursor is a non-text element and needs 3:1).
 
@@ -53,7 +53,7 @@ The whole site uses the 16 ANSI colors plus a foreground, a background and a cur
 Rules:
 
 - The cursor color (`#FFB000`) is the only accent. It appears on the cursor and the focus ring. Do not use it for buttons, links or highlights.
-- Color is never the only carrier of meaning. A 404 is yellow *and* says `404 Not Found`. A success is green *and* says `200 OK`.
+- Color is never the only carrier of meaning. A 404 is yellow _and_ says `404 Not Found`. A success is green _and_ says `200 OK`.
 - Dim text must still meet 4.5:1 against its background. If a theme change would break that, change the theme.
 - Hierarchy comes from inverse video, weight, underline and color, not from size.
 
@@ -236,15 +236,15 @@ Docs are manual pages. Each command has its own page in man-page format.
 
 The site should be fully usable without a mouse. Single-character shortcuts are active only when no text input has focus. A visible `?` opens a help panel listing every shortcut, and the help panel includes a control to turn single-key shortcuts off (needed for accessibility compliance with WCAG 2.1.4 Character Key Shortcuts).
 
-| Key | Action |
-|---|---|
-| `/` | open search |
-| `?` | show shortcuts |
-| `Esc` | close search or help, or leave the terminal input |
-| `j` / `k` | scroll down and up on docs pages |
-| `g` then `g` | jump to top |
-| `G` | jump to bottom |
-| `t` | cycle theme |
+| Key          | Action                                            |
+| ------------ | ------------------------------------------------- |
+| `/`          | open search                                       |
+| `?`          | show shortcuts                                    |
+| `Esc`        | close search or help, or leave the terminal input |
+| `j` / `k`    | scroll down and up on docs pages                  |
+| `g` then `g` | jump to top                                       |
+| `G`          | jump to bottom                                    |
+| `t`          | cycle theme                                       |
 
 Inside the terminal input, shortcuts do not apply, and normal typing, Up, Down, Tab, `Ctrl+L` and `Ctrl+C` work as described above.
 

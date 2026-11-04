@@ -83,15 +83,15 @@ Axios is a promise-based HTTP client that works in the browser and in Node.js. I
 
 ### Request commands
 
-| Command | HTTP method | Mnemonic |
-|---|---|---|
-| `cat` | GET | read a resource |
-| `touch` | POST | create something new |
-| `mv` | PUT | replace or move |
-| `sed` | PATCH | edit in place |
-| `rm` | DELETE | remove |
-| `stat` | HEAD | metadata only (headers, no body) |
-| `man` | OPTIONS | "what can I do here?" |
+| Command | HTTP method | Mnemonic                         |
+| ------- | ----------- | -------------------------------- |
+| `cat`   | GET         | read a resource                  |
+| `touch` | POST        | create something new             |
+| `mv`    | PUT         | replace or move                  |
+| `sed`   | PATCH       | edit in place                    |
+| `rm`    | DELETE      | remove                           |
+| `stat`  | HEAD        | metadata only (headers, no body) |
+| `man`   | OPTIONS     | "what can I do here?"            |
 
 `head` is reserved for the pipe stage that keeps the first N items. It is deliberately not the HTTP `HEAD` command, because the two would collide. HTTP `HEAD` is `stat`.
 
@@ -106,16 +106,16 @@ A generic escape hatch, like Axios's `request(config)`, exists for anything unus
 
 Responses are pipeable. A pipe stage receives the response data and returns transformed data. The set is intentionally small and Unix-recognisable:
 
-| Stage | What it does |
-|---|---|
-| `grep` | keep items that match: a string (any field contains it), an object (fields equal), or a predicate function |
-| `head(n)` / `tail(n)` | first or last N items |
-| `sort` | sort items, optionally by a key |
-| `uniq` | drop duplicates, optionally by a key |
-| `cut(...fields)` | keep only the named fields |
-| `wc` | count items |
-| `tee(fn)` | run a side effect (logging, debugging) and pass the data through unchanged |
-| `xargs(fn)` | for each item, run another request and collect the results |
+| Stage                 | What it does                                                                                               |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `grep`                | keep items that match: a string (any field contains it), an object (fields equal), or a predicate function |
+| `head(n)` / `tail(n)` | first or last N items                                                                                      |
+| `sort`                | sort items, optionally by a key                                                                            |
+| `uniq`                | drop duplicates, optionally by a key                                                                       |
+| `cut(...fields)`      | keep only the named fields                                                                                 |
+| `wc`                  | count items                                                                                                |
+| `tee(fn)`             | run a side effect (logging, debugging) and pass the data through unchanged                                 |
+| `xargs(fn)`           | for each item, run another request and collect the results                                                 |
 
 Rules: stages never mutate their input, they compose in any order, and they behave identically in both languages. A stage that cannot apply to the data it receives (for example `cut` on a string) throws a clear `UsrError`, not a silent no-op.
 
@@ -128,18 +128,18 @@ Syntax differs by language because the languages differ:
 
 Flags are Unix-style options. Where curl already has a flag, USR borrows curl's letter and curl's meaning, so developers already know it.
 
-| Flag | Long form | Meaning |
-|---|---|---|
-| `-H` | `--header` | add a header (repeatable) |
-| `-d` | `--data` | request body |
-| `-u` | `--user` | basic auth, `user:password` |
-| `-m` | `--max-time` | timeout in **seconds** (same as curl) |
-| `-L` | `--location` | follow redirects |
-| `-o` | `--output` | write the response body to a file (Node and Python only; the one place USR touches the filesystem) |
-| `-s` | `--silent` | suppress logging |
-| `-v` | `--verbose` | log request and response details (secrets redacted) |
-| `-q` | `--query` | add a query parameter, `key=value` (repeatable) |
-| | `--ok` | `validateStatus` shortcut: accept every status without throwing |
+| Flag | Long form    | Meaning                                                                                            |
+| ---- | ------------ | -------------------------------------------------------------------------------------------------- |
+| `-H` | `--header`   | add a header (repeatable)                                                                          |
+| `-d` | `--data`     | request body                                                                                       |
+| `-u` | `--user`     | basic auth, `user:password`                                                                        |
+| `-m` | `--max-time` | timeout in **seconds** (same as curl)                                                              |
+| `-L` | `--location` | follow redirects                                                                                   |
+| `-o` | `--output`   | write the response body to a file (Node and Python only; the one place USR touches the filesystem) |
+| `-s` | `--silent`   | suppress logging                                                                                   |
+| `-v` | `--verbose`  | log request and response details (secrets redacted)                                                |
+| `-q` | `--query`    | add a query parameter, `key=value` (repeatable)                                                    |
+|      | `--ok`       | `validateStatus` shortcut: accept every status without throwing                                    |
 
 This table is the starting point. Any new flag goes through the same rule: reuse curl's meaning if one exists, otherwise pick a clear long form first and add a short form only if it is obvious.
 
@@ -150,13 +150,13 @@ Every flag can be given two ways, and both resolve to the same internal options 
 
 ### Clients, defaults and traps
 
-| USR | Axios equivalent | Purpose |
-|---|---|---|
+| USR                     | Axios equivalent                 | Purpose                                          |
+| ----------------------- | -------------------------------- | ------------------------------------------------ |
 | `cd(baseUrl, options?)` | `axios.create({ baseURL, ... })` | scoped client with its own base URL and defaults |
-| `defaults` | `axios.defaults` | global defaults |
-| `trap("request", fn)` | `interceptors.request.use` | run before a request is sent |
-| `trap("response", fn)` | `interceptors.response.use` | run on every response or error |
-| `untrap(handle)` | `interceptors.*.eject` | remove a trap |
+| `defaults`              | `axios.defaults`                 | global defaults                                  |
+| `trap("request", fn)`   | `interceptors.request.use`       | run before a request is sent                     |
+| `trap("response", fn)`  | `interceptors.response.use`      | run on every response or error                   |
+| `untrap(handle)`        | `interceptors.*.eject`           | remove a trap                                    |
 
 Traps honour the same `synchronous` and `runWhen` options as Axios interceptors. A scoped client from `cd()` has its own traps and defaults and exposes the same commands (`api.cat("/users")`).
 
@@ -178,7 +178,10 @@ await usr.sed("https://api.site.com/users/42", { active: false });
 await usr.rm("https://api.site.com/users/42");
 
 // Flags: structured and command-line string
-await usr.cat("https://api.site.com/me", { "-H": "Authorization: Bearer TOKEN", "-m": 5 });
+await usr.cat("https://api.site.com/me", {
+  "-H": "Authorization: Bearer TOKEN",
+  "-m": 5,
+});
 await usr.cat("-H 'Authorization: Bearer TOKEN' -m 5 https://api.site.com/me");
 
 // Pipes
@@ -193,7 +196,10 @@ const api = usr.cd("https://api.site.com", { "-H": "Authorization: Bearer TOKEN"
 const me = await api.cat("/me");
 
 // Trap (interceptor)
-const handle = api.trap("response", (res) => { console.log(res.status); return res; });
+const handle = api.trap("response", (res) => {
+  console.log(res.status);
+  return res;
+});
 api.untrap(handle);
 ```
 
@@ -267,13 +273,13 @@ The version is a mechanical counter in `MAJOR.MINOR.PATCH` form. It is valid und
 - `PATCH` only runs from 0 to 9. When `PATCH` is 9, the next release resets it to 0 and bumps `MINOR`.
 - `MINOR` runs from 0 to 99 while pre-1.0. When the version is `0.99.9`, the next release is `1.0.0`.
 
-| Current | Next |
-|---|---|
-| `0.0.0` | `0.0.1` |
-| `0.0.9` | `0.1.0` |
-| `0.1.9` | `0.2.0` |
+| Current  | Next     |
+| -------- | -------- |
+| `0.0.0`  | `0.0.1`  |
+| `0.0.9`  | `0.1.0`  |
+| `0.1.9`  | `0.2.0`  |
 | `0.98.9` | `0.99.0` |
-| `0.99.9` | `1.0.0` |
+| `0.99.9` | `1.0.0`  |
 
 After `1.0.0` the same rollover rule continues (patch to minor at 9, minor to major at 99) unless the owner changes it.
 

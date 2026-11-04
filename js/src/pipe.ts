@@ -17,7 +17,8 @@ function asArray(input: unknown): unknown[] {
 }
 
 function matchItem(item: unknown, match: unknown): boolean {
-  if (typeof match === "function") return Boolean((match as (item: unknown) => boolean)(item));
+  if (typeof match === "function")
+    return Boolean((match as (item: unknown) => boolean)(item));
   if (typeof match === "string") {
     const s = JSON.stringify(item);
     return s.includes(match);
@@ -25,7 +26,9 @@ function matchItem(item: unknown, match: unknown): boolean {
   if (isPlainObject(match)) {
     const m = match as Record<string, unknown>;
     if (!isPlainObject(item)) return false;
-    return Object.entries(m).every(([k, v]) => (item as Record<string, unknown>)[k] === v);
+    return Object.entries(m).every(
+      ([k, v]) => (item as Record<string, unknown>)[k] === v,
+    );
   }
   return String(item) === String(match);
 }

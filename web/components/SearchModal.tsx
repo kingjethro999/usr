@@ -34,13 +34,25 @@ export function SearchModal({
     const q = query.toLowerCase();
     for (const [cmd, man] of Object.entries(MAN_COMMANDS)) {
       if (cmd.toLowerCase().includes(q)) {
-        matches.push({ cmd, line: `${man.cmd}(${man.section}): ${man.summary}`, matchTerm: query });
+        matches.push({
+          cmd,
+          line: `${man.cmd}(${man.section}): ${man.summary}`,
+          matchTerm: query,
+        });
       } else if (man.description.toLowerCase().includes(q)) {
-        matches.push({ cmd, line: `${man.cmd}: ${man.description.slice(0, 80)}...`, matchTerm: query });
+        matches.push({
+          cmd,
+          line: `${man.cmd}: ${man.description.slice(0, 80)}...`,
+          matchTerm: query,
+        });
       } else {
         for (const opt of man.options) {
           if (opt.flag.toLowerCase().includes(q) || opt.desc.toLowerCase().includes(q)) {
-            matches.push({ cmd, line: `${man.cmd}: ${opt.flag} - ${opt.desc}`, matchTerm: query });
+            matches.push({
+              cmd,
+              line: `${man.cmd}: ${opt.flag} - ${opt.desc}`,
+              matchTerm: query,
+            });
             break;
           }
         }

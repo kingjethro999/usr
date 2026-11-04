@@ -1,0 +1,11 @@
+node_modules/
+.next/
+dist/
+build/
+*.egg-info/
+__pycache__/
+.mypy_cache/
+package-lock.json
+pnpm-lock.yaml
+.env*
+VERSION

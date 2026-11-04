@@ -73,10 +73,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         shortcutsEnabled={shortcutsEnabled}
         onToggleShortcuts={() => setShortcutsEnabled((prev) => !prev)}
       />
-      <SearchModal
-        isOpen={searchOpen}
-        onClose={() => setSearchOpen(false)}
-      />
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <main className="w-full flex-grow">{children}</main>
     </>
   );

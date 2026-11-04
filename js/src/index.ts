@@ -1,7 +1,19 @@
 import { createUsr, defaults, cd } from "./client";
 import { UsrError } from "./error";
 import { parseFlagString } from "./flags";
-import { grep, head, tail, sort, uniq, cut, wc, tee, xargs, pipeable, PipeError } from "./pipe";
+import {
+  grep,
+  head,
+  tail,
+  sort,
+  uniq,
+  cut,
+  wc,
+  tee,
+  xargs,
+  pipeable,
+  PipeError,
+} from "./pipe";
 import type { UsrConfig, UsrInstance, UsrResponse, PipeStage } from "./types";
 
 const usr: UsrInstance = createUsr();

@@ -4,7 +4,8 @@
 
 **Goal:** Build out all remaining components specified in `CLAUDE.md` and `web/AGENTS.md`: the interactive in-memory terminal REPL, ANSI theme system and character grid, man-page documentation system, cross-language parity test suite, and the automated CI/CD pipeline.
 
-**Architecture:** 
+**Architecture:**
+
 - A shared root metadata source (`version.json`) ensures package name and version are synchronized across npm (`js/`), PyPI (`py/`), and Next.js (`web/`).
 - A shared JSON scenario suite (`test-parity/scenarios.json`) is executed by both `node:test` in JS and `unittest` in Python to verify cross-language API and pipe parity.
 - An in-memory mock adapter in `web/` connects the real USR JS engine to an interactive character-grid terminal REPL with zero network calls, tab completion, ANSI theme switching (`night`, `paper`, `amber`, `phosphor`), and live command execution.
@@ -12,12 +13,14 @@
 - A GitHub Actions workflow (`.github/workflows/ci.yml`) enforcing quality gates, cross-language tests, mechanical version rollover, and release automation.
 
 **Tech Stack:**
+
 - TypeScript, Node.js 20+, `node:test`
 - Python 3.10+, `httpx`, `mypy`, `unittest`
 - Next.js 16 (App Router), React 19, Tailwind CSS 4
 - GitHub Actions
 
 **Spec:**
+
 - Root specification: `CLAUDE.md`
 - Web app design specification: `web/AGENTS.md`
 
@@ -44,6 +47,7 @@
 ### Task 1: Shared Source of Truth & Version Management
 
 **Files:**
+
 - Create: `version.json`
 - Create: `scripts/sync-version.js`
 - Create: `scripts/bump-version.js`
@@ -52,6 +56,7 @@
 - Modify: `web/package.json`
 
 **Interfaces:**
+
 - Produces: `version.json` containing `{ "name": "usr", "version": "0.1.0" }`.
 - Produces: `bumpVersion(currentVersion: string) -> string` following `CLAUDE.md` rollover rules.
 - Produces: `syncVersion()` ensuring all subproject manifests read the exact name and version.
@@ -59,17 +64,23 @@
 - [ ] **Step 1: Write test for version rollover logic**
 
 Create `test/version.test.js`:
+
 ```js
 import { describe, it } from "node:test";
 import assert from "node:assert";
 import { getNextVersion } from "../scripts/bump-version.js";
 
 describe("version rollover rules", () => {
-  it("increments patch from 0.0.0 to 0.0.1", () => assert.strictEqual(getNextVersion("0.0.0"), "0.0.1"));
-  it("rolls over patch 9 to minor: 0.0.9 -> 0.1.0", () => assert.strictEqual(getNextVersion("0.0.9"), "0.1.0"));
-  it("increments patch: 0.1.0 -> 0.1.1", () => assert.strictEqual(getNextVersion("0.1.0"), "0.1.1"));
-  it("rolls over patch 9 to minor: 0.1.9 -> 0.2.0", () => assert.strictEqual(getNextVersion("0.1.9"), "0.2.0"));
-  it("rolls over minor 99 to major: 0.99.9 -> 1.0.0", () => assert.strictEqual(getNextVersion("0.99.9"), "1.0.0"));
+  it("increments patch from 0.0.0 to 0.0.1", () =>
+    assert.strictEqual(getNextVersion("0.0.0"), "0.0.1"));
+  it("rolls over patch 9 to minor: 0.0.9 -> 0.1.0", () =>
+    assert.strictEqual(getNextVersion("0.0.9"), "0.1.0"));
+  it("increments patch: 0.1.0 -> 0.1.1", () =>
+    assert.strictEqual(getNextVersion("0.1.0"), "0.1.1"));
+  it("rolls over patch 9 to minor: 0.1.9 -> 0.2.0", () =>
+    assert.strictEqual(getNextVersion("0.1.9"), "0.2.0"));
+  it("rolls over minor 99 to major: 0.99.9 -> 1.0.0", () =>
+    assert.strictEqual(getNextVersion("0.99.9"), "1.0.0"));
 });
 ```
 
@@ -99,11 +110,13 @@ git commit -m "feat(core): establish single source of truth for package name and
 ### Task 2: Cross-Language Parity Test Suite
 
 **Files:**
+
 - Create: `test-parity/scenarios.json`
 - Create: `js/test/parity.test.js`
 - Create: `py/test_parity.py`
 
 **Interfaces:**
+
 - Consumes: `test-parity/scenarios.json`
 - Tests:
   - Command mapping (`cat` -> GET, `touch` -> POST, `mv` -> PUT, `sed` -> PATCH, `rm` -> DELETE, `stat` -> HEAD, `man` -> OPTIONS)
@@ -139,9 +152,11 @@ git commit -m "test(parity): implement cross-language test suite for JS and Pyth
 ### Task 3: CI/CD Pipeline Automation
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 **Interfaces:**
+
 - Workflow triggers: `push` on `main`, `pull_request` on `main`.
 - Jobs:
   - `check`: Runs matrix for JS, Python, and Web checks (lint, types, unit tests, parity tests).
@@ -150,6 +165,7 @@ git commit -m "test(parity): implement cross-language test suite for JS and Pyth
 - [ ] **Step 1: Write GitHub Actions workflow configuration in `.github/workflows/ci.yml`**
 
 Include:
+
 - Concurrency group `release-${{ github.ref }}`
 - Job `quality-gate`:
   - Node 20 setup, `npm run lint`, `npm run typecheck`, `npm run build`, `npm test` in `js/`
@@ -163,11 +179,13 @@ Include:
 - [ ] **Step 2: Verify local quality gate matches CI script**
 
 Run:
+
 ```bash
 (cd js && npm run lint && npm run typecheck && npm run build && npm test) && \
 (cd py && mypy usr && python3 -m unittest -v test_usr.py test_parity.py) && \
 (cd web && pnpm lint && pnpm build)
 ```
+
 Expected: All exit with code 0.
 
 - [ ] **Step 3: Commit**
@@ -182,6 +200,7 @@ git commit -m "ci: add GitHub Actions workflow for quality gate and automated re
 ### Task 4: Web ANSI Theme Engine & Character Grid
 
 **Files:**
+
 - Create: `web/app/theme.ts`
 - Create: `web/components/StatusLine.tsx`
 - Create: `web/components/ShortcutsHelp.tsx`
@@ -189,6 +208,7 @@ git commit -m "ci: add GitHub Actions workflow for quality gate and automated re
 - Modify: `web/app/layout.tsx`
 
 **Interfaces:**
+
 - Produces: `Theme` type (`"night" | "paper" | "amber" | "phosphor"`).
 - Produces: `useTheme` / theme state controller persisting in `localStorage`.
 - Produces: `StatusLine` rendering top bar with version, install commands, active theme, and `?` toggle.
@@ -219,12 +239,14 @@ git commit -m "feat(web): add ANSI 16-color theme engine, character grid, and st
 ### Task 5: In-Memory Mock Client & Terminal REPL Engine
 
 **Files:**
+
 - Create: `web/lib/mock-api.ts`
 - Create: `web/lib/terminal-parser.ts`
 - Create: `web/components/Terminal.tsx`
 - Modify: `web/app/page.tsx`
 
 **Interfaces:**
+
 - Produces: `MockHttpAdapter`: in-memory response provider for `/users`, `/users/:id`, `/posts`, with query and pagination support.
 - Produces: `parseTerminalInput(line: string)`: shell-quoted tokenizer into command, flags, and pipes.
 - Produces: `Terminal` component with:
@@ -270,6 +292,7 @@ git commit -m "feat(web): implement in-memory mock client and live terminal REPL
 ### Task 6: Manual Pages Documentation System & Navigation
 
 **Files:**
+
 - Create: `web/lib/man-data.ts`
 - Create: `web/app/man/page.tsx`
 - Create: `web/app/man/[command]/page.tsx`
@@ -278,6 +301,7 @@ git commit -m "feat(web): implement in-memory mock client and live terminal REPL
 - Create: `web/components/LanguageSwitch.tsx`
 
 **Interfaces:**
+
 - Produces: `man-data.ts` single structured definition of all commands, flags, and examples.
 - Produces: `ManPage` rendering sections: `NAME`, `SYNOPSIS`, `DESCRIPTION`, `OPTIONS`, `EXAMPLES`, `ERRORS`, `SEE ALSO`.
 - Produces: `LanguageSwitch` `--lang=js` / `--lang=python` persistent toggle.
@@ -312,9 +336,11 @@ git commit -m "feat(web): add Unix man-page docs system with search and language
 ### Task 7: Full System Verification, Parity Check, & Git Push
 
 **Files:**
+
 - Review and verify all modified files across repository.
 
 **Interfaces:**
+
 - Runs full test and build matrix across `js/`, `py/`, `web/`, and `test-parity/`.
 
 - [ ] **Step 1: Execute all lint, typecheck, build, and test commands**
@@ -324,6 +350,7 @@ cd /home/japheth/Desktop/usr/js && npm run lint && npm run typecheck && npm run 
 cd /home/japheth/Desktop/usr/py && mypy usr && python3 -m unittest -v test_usr.py test_parity.py
 cd /home/japheth/Desktop/usr/web && pnpm lint && pnpm build
 ```
+
 Expected: All exit 0 with clean output.
 
 - [ ] **Step 2: Commit any remaining touches and push to origin**
@@ -332,4 +359,5 @@ Expected: All exit 0 with clean output.
 git pull --rebase origin main
 git push origin main
 ```
+
 Expected: Successfully pushed to remote origin.

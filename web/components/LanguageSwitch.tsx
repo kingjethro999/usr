@@ -28,7 +28,7 @@ export function useCodeLang() {
   const lang = useSyncExternalStore(
     subscribeLang,
     getLangSnapshot,
-    getLangServerSnapshot
+    getLangServerSnapshot,
   );
 
   const switchLang = useCallback((newLang: CodeLang) => {

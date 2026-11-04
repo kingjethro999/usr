@@ -42,7 +42,9 @@ export function resolveURL(baseURL: string | undefined, url: string): string {
   }
 }
 
-export function buildQueryString(params: Record<string, string | number | boolean>): string {
+export function buildQueryString(
+  params: Record<string, string | number | boolean>,
+): string {
   const parts: string[] = [];
   for (const [k, v] of Object.entries(params)) {
     parts.push(`${encodeURIComponent(String(k))}=${encodeURIComponent(String(v))}`);
@@ -50,14 +52,19 @@ export function buildQueryString(params: Record<string, string | number | boolea
   return parts.join("&");
 }
 
-export function appendQuery(url: string, params?: Record<string, string | number | boolean>): string {
+export function appendQuery(
+  url: string,
+  params?: Record<string, string | number | boolean>,
+): string {
   if (!params || Object.keys(params).length === 0) return url;
   const qs = buildQueryString(params);
   const sep = url.includes("?") ? "&" : "?";
   return `${url}${sep}${qs}`;
 }
 
-export function normalizeHeaders(headers: Record<string, string>): Record<string, string> {
+export function normalizeHeaders(
+  headers: Record<string, string>,
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(headers)) {
     if (FORBIDDEN_KEYS.has(k)) continue;
@@ -66,7 +73,10 @@ export function normalizeHeaders(headers: Record<string, string>): Record<string
   return out;
 }
 
-export function serializeBody(data: unknown, headers: Record<string, string>): { body: string | null; headers: Record<string, string> } {
+export function serializeBody(
+  data: unknown,
+  headers: Record<string, string>,
+): { body: string | null; headers: Record<string, string> } {
   if (data === null || data === undefined) return { body: null, headers };
   if (typeof data === "string") {
     headers["content-type"] ??= "text/plain";

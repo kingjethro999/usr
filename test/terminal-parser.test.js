@@ -22,7 +22,7 @@ describe("terminal parser", () => {
   });
 
   it("handles quoted arguments with spaces", () => {
-    const res = parseTerminalLine("touch /users -d '{\"name\":\"Ada Lovelace\"}'");
+    const res = parseTerminalLine('touch /users -d \'{"name":"Ada Lovelace"}\'');
     assert.strictEqual(res.command, "touch");
     assert.deepStrictEqual(res.args, ["/users", "-d", '{"name":"Ada Lovelace"}']);
   });

@@ -1,6 +1,7 @@
 import type { UsrConfig, UsrResponse } from "./types";
 
-const CREDENTIAL_KEYS = /^(authorization|cookie|x-api-key|proxy-authorization|set-cookie)$/i;
+const CREDENTIAL_KEYS =
+  /^(authorization|cookie|x-api-key|proxy-authorization|set-cookie)$/i;
 
 function redact(obj: Record<string, string>): Record<string, string> {
   const out: Record<string, string> = {};
@@ -20,13 +21,16 @@ export class UsrError extends Error {
   isAxiosError = false;
   toJSON: () => Record<string, unknown>;
 
-  constructor(message: string, opts: {
-    code?: string;
-    config?: UsrConfig;
-    response?: UsrResponse;
-    request?: unknown;
-    status?: number;
-  } = {}) {
+  constructor(
+    message: string,
+    opts: {
+      code?: string;
+      config?: UsrConfig;
+      response?: UsrResponse;
+      request?: unknown;
+      status?: number;
+    } = {},
+  ) {
     super(message);
     this.code = opts.code ?? "ERR_UNKNOWN";
     this.status = opts.status;
@@ -41,9 +45,18 @@ export class UsrError extends Error {
       name: this.name,
       code: this.code,
       status: this.status,
-      config: opts.config ? { ...opts.config, headers: redact(opts.config.headers ?? {}) } : undefined,
+      config: opts.config
+        ? { ...opts.config, headers: redact(opts.config.headers ?? {}) }
+        : undefined,
       response: opts.response
-        ? { data: opts.response.data, status: opts.response.status, statusText: opts.response.statusText, headers: redact(opts.response.headers), config: opts.response.config, request: opts.response.request }
+        ? {
+            data: opts.response.data,
+            status: opts.response.status,
+            statusText: opts.response.statusText,
+            headers: redact(opts.response.headers),
+            config: opts.response.config,
+            request: opts.response.request,
+          }
         : undefined,
       request: opts.request,
     });
@@ -58,12 +71,30 @@ function timeoutError(config?: UsrConfig, request?: unknown): UsrError {
   return new UsrError("Request timed out", { code: "ETIMEDOUT", config, request });
 }
 
-function badRequestError(message: string, config?: UsrConfig, response?: UsrResponse): UsrError {
-  return new UsrError(message, { code: "ERR_BAD_REQUEST", config, response, status: response?.status });
+function badRequestError(
+  message: string,
+  config?: UsrConfig,
+  response?: UsrResponse,
+): UsrError {
+  return new UsrError(message, {
+    code: "ERR_BAD_REQUEST",
+    config,
+    response,
+    status: response?.status,
+  });
 }
 
-function badResponseError(message: string, config?: UsrConfig, response?: UsrResponse): UsrError {
-  return new UsrError(message, { code: "ERR_BAD_RESPONSE", config, response, status: response?.status });
+function badResponseError(
+  message: string,
+  config?: UsrConfig,
+  response?: UsrResponse,
+): UsrError {
+  return new UsrError(message, {
+    code: "ERR_BAD_RESPONSE",
+    config,
+    response,
+    status: response?.status,
+  });
 }
 
 function canceledError(config?: UsrConfig, request?: unknown): UsrError {
@@ -75,7 +106,21 @@ function invalidUrlError(message: string, config?: UsrConfig): UsrError {
 }
 
 function tooManyRedirectsError(config?: UsrConfig, response?: UsrResponse): UsrError {
-  return new UsrError("Too many redirects", { code: "ERR_TOO_MANY_REDIRECTS", config, response, status: response?.status });
+  return new UsrError("Too many redirects", {
+    code: "ERR_TOO_MANY_REDIRECTS",
+    config,
+    response,
+    status: response?.status,
+  });
 }
 
-export { networkError, timeoutError, badRequestError, badResponseError, canceledError, invalidUrlError, tooManyRedirectsError, redact };
+export {
+  networkError,
+  timeoutError,
+  badRequestError,
+  badResponseError,
+  canceledError,
+  invalidUrlError,
+  tooManyRedirectsError,
+  redact,
+};

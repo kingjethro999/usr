@@ -45,7 +45,7 @@ export function handleMockRequest(
   method: string,
   urlPath: string,
   data?: unknown,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): MockResponse {
   const normMethod = method.toUpperCase();
   // Strip origin if present
@@ -129,7 +129,10 @@ export function handleMockRequest(
       };
     }
     if (normMethod === "POST") {
-      const body = typeof data === "string" ? JSON.parse(data) : (data as Record<string, unknown>) || {};
+      const body =
+        typeof data === "string"
+          ? JSON.parse(data)
+          : (data as Record<string, unknown>) || {};
       const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
       const newUser: MockUser = {
         id: newId,
@@ -173,7 +176,10 @@ export function handleMockRequest(
     }
 
     if (normMethod === "PUT") {
-      const body = typeof data === "string" ? JSON.parse(data) : (data as Record<string, unknown>) || {};
+      const body =
+        typeof data === "string"
+          ? JSON.parse(data)
+          : (data as Record<string, unknown>) || {};
       users[index] = {
         id,
         name: String(body.name || users[index].name),
@@ -190,7 +196,10 @@ export function handleMockRequest(
     }
 
     if (normMethod === "PATCH") {
-      const body = typeof data === "string" ? JSON.parse(data) : (data as Record<string, unknown>) || {};
+      const body =
+        typeof data === "string"
+          ? JSON.parse(data)
+          : (data as Record<string, unknown>) || {};
       users[index] = {
         ...users[index],
         ...body,
