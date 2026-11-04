@@ -21,12 +21,17 @@ export function syncVersion() {
     fs.writeFileSync(jsPkgPath, JSON.stringify(jsPkg, null, 2) + "\n", "utf8");
   }
 
-  // 2. web/package.json
+  // 2. web/package.json and web/version.json
   const webPkgPath = path.join(rootDir, "web", "package.json");
   if (fs.existsSync(webPkgPath)) {
     const webPkg = JSON.parse(fs.readFileSync(webPkgPath, "utf8"));
     webPkg.version = version;
     fs.writeFileSync(webPkgPath, JSON.stringify(webPkg, null, 2) + "\n", "utf8");
+    fs.writeFileSync(
+      path.join(rootDir, "web", "version.json"),
+      JSON.stringify(versionInfo, null, 2) + "\n",
+      "utf8"
+    );
   }
 
   // 3. py/pyproject.toml
