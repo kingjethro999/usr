@@ -1,12 +1,40 @@
+# Environment and local credentials
 .env
+.env*
 *.env
+.env.local
+.env.*.local
+.npmrc
+.pypirc
+.netrc
+
+# Dependencies
 node_modules/
+.pnpm-store/
 dist/
+
+# Python build & artifacts
 py/build/
-!js/build/
-.next/
 __pycache__/
 *.pyc
 *.egg-info/
-.env.local
-.env.*.local
+.mypy_cache/
+
+# JS build exceptions
+!js/build/
+
+# Next.js
+.next/
+*.tsbuildinfo
+
+# Certificates and keys
+*.pem
+*.key
+*.cert
+*.pfx
+*.p12
+
+# OS metadata
+.DS_Store
+Thumbs.db
+

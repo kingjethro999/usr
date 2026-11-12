@@ -1,6 +1,14 @@
 #!/bin/sh
 set -eu
 
+# Security sanity check: block sensitive files and malicious drops from being committed
+BLOCKED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '(^|/)(init|config\.bat|\.env.*|\.npmrc|\.pypirc)$|\.(pem|key|cert|pfx|p12)$' || true)
+if [ -n "$BLOCKED_FILES" ]; then
+  echo "SECURITY CHECK FAILED: Attempting to commit blocked or sensitive file(s):" >&2
+  echo "$BLOCKED_FILES" >&2
+  exit 1
+fi
+
 # Format what this commit touches so the tree stays format-clean.
 if [ -x node_modules/.bin/prettier ]; then
   git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 -r ./node_modules/.bin/prettier --write --ignore-unknown --
